@@ -6,7 +6,7 @@ public class AppDriver {
 
 	public static void main(String[] args) {
 		
-		Application.launch(frame.class, args);
+		Application.launch(ClientGUI.class, args);
 		
 	} 
 	

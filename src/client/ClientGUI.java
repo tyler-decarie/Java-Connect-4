@@ -33,7 +33,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
 
-public class frame extends Application{
+public class ClientGUI extends Application{
 
 	Stage window; //stage is the whole window
 	Scene scene1, scene2; //scenes are the content within the window

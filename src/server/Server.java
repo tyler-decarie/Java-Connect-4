@@ -11,8 +11,8 @@ import java.util.*;
 
 
 /**
- * @author dwatson
- * @version 1.0
+ * @author dwatson, travis, tyler
+ * @version 1.1
  * 
  */
 public class Server
