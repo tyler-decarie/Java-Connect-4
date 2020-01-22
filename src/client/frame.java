@@ -1,4 +1,4 @@
-package frontEnd;
+package client;
 
 import com.sun.prism.paint.Color;
 

@@ -1,4 +1,4 @@
-package frontEnd;
+package client;
 
 import javafx.application.Application;
 
