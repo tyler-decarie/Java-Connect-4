@@ -8,6 +8,6 @@ public class AppDriver {
 		
 		Application.launch(frame.class, args);
 		
-	}
+	} 
 	
 }
