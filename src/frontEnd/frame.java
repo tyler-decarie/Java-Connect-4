@@ -41,7 +41,7 @@ public class frame extends Application{
 		
 		window = primaryStage;
 		
-		
+		//im gay
 		//scene1 stuff
 		
 		Label ipLbl = new Label("IP Address"); //makes new lbl for ip
