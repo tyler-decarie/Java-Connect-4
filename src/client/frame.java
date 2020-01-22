@@ -1,5 +1,9 @@
 package client;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import com.sun.prism.paint.Color;
 
 import javafx.application.Application;
@@ -79,14 +83,25 @@ public class frame extends Application{
 				
 				if(ip.length() != 0 && username.length() != 0) {
 					
+					try {
+						
+						Socket s1 = new Socket(ip, 3333);
+						
+						
+					} catch (UnknownHostException e) {
+						
+						failLbl.setText("Failed to connect");
+						
+					} catch (IOException e) {
+						
+						failLbl.setText("Failed to connect");
+						
+					}
+					
+					
 					window.setScene(scene2);
 					
-				} else {
-					
-					failLbl.setText("Failed to connect");
-					
-				}
-				
+				} 
 			}
 		}); 		
 
@@ -142,7 +157,7 @@ public class frame extends Application{
 		
 		scene2 = new Scene(screen, 1000, 600);
 		
-		window.setScene(scene1); //sets default scene to scene1 on launch
+		window.setScene(scene2); //sets default scene to scene1 on launch
 		window.setTitle("Rock, Paper, Scissors"); //sets title of the window
 		window.show(); //shows everything on the window
 	}
