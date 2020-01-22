@@ -15,7 +15,7 @@ import java.util.*;
  * @version 1.0
  * 
  */
-public class SeverObj
+public class Server
 {
 	/**
 	 * @param args
