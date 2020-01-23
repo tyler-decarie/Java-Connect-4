@@ -37,7 +37,7 @@ public class Server
 		}
 
 		
-		System.out.println("Server gup and running!!!!");
+		System.out.println("Server up and running!!!!");
 		
 		while(true)
 		{

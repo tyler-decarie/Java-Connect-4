@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.List;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -53,7 +54,6 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 		window = primaryStage;
 		
-		//im gay
 		//scene1 stuff
 		
 		Label ipLbl = new Label("IP Address"); //makes new lbl for ip
@@ -91,29 +91,15 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 				
 				if(ip.length() != 0 && username.length() != 0) {
 					
-					try {
-						
-						socket = new Socket(ip, 3333);
-						OutputStream os = socket.getOutputStream();
-						oos = new ObjectOutputStream(os);
-						
-						
-					} catch (UnknownHostException e) {
-						
-						failLbl.setText("Failed to connect");
-						
-					} catch (IOException e) {
-						
-						failLbl.setText("Failed to connect");
-						
-					}
+					connect();
 					
 					
-					window.setScene(scene2);
 					
 				} 
 			}
-		}); 		
+		}); 	
+		
+		
 
 		scene1 = new Scene(grid, 400, 400); //adds everything to the scene
 		
@@ -172,6 +158,32 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		window.show(); //shows everything on the window
 	}
 
+	
+	public void connect() {
+		try {
+			
+			socket = new Socket(ip, 3333);
+			OutputStream os = socket.getOutputStream();
+			oos = new ObjectOutputStream(os);
+			
+			lis = new InputListener(socket, this);
+			
+		} catch (UnknownHostException e) {
+			
+			//failLbl.setText("Failed to connect");
+			System.out.println("Failed to Connect");
+			
+		} catch (IOException e) {
+			
+			//failLbl.setText("Failed to connect");
+			System.out.println("Failed to Connect");
+			
+		}
+		
+		
+		window.setScene(scene2);
+	}
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		
