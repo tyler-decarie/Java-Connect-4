@@ -1,6 +1,10 @@
 package client;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -29,16 +33,20 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import utility.InputListener;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
 
-public class ClientGUI extends Application{
+public class ClientGUI extends Application implements PropertyChangeListener{
 
 	Stage window; //stage is the whole window
 	Scene scene1, scene2; //scenes are the content within the window
 	String ip;
 	String username;
+	Socket socket;
+	ObjectOutputStream oos;
+	InputListener lis;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -85,7 +93,9 @@ public class ClientGUI extends Application{
 					
 					try {
 						
-						Socket s1 = new Socket(ip, 3333);
+						socket = new Socket(ip, 3333);
+						OutputStream os = socket.getOutputStream();
+						oos = new ObjectOutputStream(os);
 						
 						
 					} catch (UnknownHostException e) {
@@ -160,6 +170,11 @@ public class ClientGUI extends Application{
 		window.setScene(scene2); //sets default scene to scene1 on launch
 		window.setTitle("Rock, Paper, Scissors"); //sets title of the window
 		window.show(); //shows everything on the window
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		
 	}
 	
 }
