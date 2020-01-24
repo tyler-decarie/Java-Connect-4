@@ -13,7 +13,7 @@ import client.ClientGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-public class InputListener implements Runnable, PropertyChangeListener{
+public class InputListener implements Runnable{
 
 	//attributes
 	private Socket socket;
@@ -26,6 +26,7 @@ public class InputListener implements Runnable, PropertyChangeListener{
 		
 		this.socket = socket;
 		observers.add(observer);
+		
 	}
 	
 	
@@ -42,11 +43,13 @@ public class InputListener implements Runnable, PropertyChangeListener{
 
 	@Override
 	public void run() {
-		
+		// runs infinitely, needs to accept every input
+		while (true) {
 		
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
-			ois.readObject();
+			// waits here to read an object, then sends the object to the observer
+			notify(ois.readObject());
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -55,17 +58,19 @@ public class InputListener implements Runnable, PropertyChangeListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		}
+	}
+	
+	//
+	public void notify(Object object) {
 		
+		for( PropertyChangeListener observer : observers  )
+		{
+			// even tho theres only one observer, the example works like this
+			// this will need to work with both messages and game events
+			observer.propertyChange(new PropertyChangeEvent(this, null, object, object);
+		}
 		
 	}
 
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	
 }

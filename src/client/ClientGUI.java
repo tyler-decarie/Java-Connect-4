@@ -185,7 +185,23 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	}
 	
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
+	// inputListener will send the object to the gui through here,
+	// needs to work with messages and game events 
+	public void propertyChange(PropertyChangeEvent event) {
+		
+		//
+		String propertyChanged = (String)event.getPropertyName();
+		int oldValue = (Integer)event.getOldValue();
+		int newValue = (Integer)event.getNewValue();
+		
+		if(propertyChanged.equals("Message"))
+		{			
+			// send message to the chat box
+		}
+		else if (propertyChanged.equals("Input"))
+		{
+			// make changes to the game board
+		}
 		
 	}
 	

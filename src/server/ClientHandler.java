@@ -49,9 +49,23 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 	}
 	
 	
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(PropertyChangeEvent event) {
 		
+		// code from example, but will work the same way we need for assignment
+		String propertyChanged = (String)event.getPropertyName();
+		int oldValue = (Integer)event.getOldValue();
+		int newValue = (Integer)event.getNewValue();
 		
+		if(propertyChanged.equals("Message"))
+		{			
+			// im thinking we check the source of the input will make it easy to decide where to send the object to
+			// (1 to 2, 2 to 1)
+			event.getSource();
+		}
+		else if (propertyChanged.equals("Input"))
+		{
+			// send input to other player
+		}
 		
 	}
 
