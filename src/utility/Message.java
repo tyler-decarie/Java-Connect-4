@@ -22,6 +22,7 @@ public class Message implements Serializable
 	//Constants
 	static final long serialVersionUID = 5488945625178844229L;
 	//Attributes
+	private String			name = "Message";
 	private String 			user;
 	private String			msg;
 	private Date			timeStamp;
@@ -86,6 +87,14 @@ public class Message implements Serializable
 		this.timeStamp = timeStamp;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	//Operational Methods
 	public String toString()
 	{

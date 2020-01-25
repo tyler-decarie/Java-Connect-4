@@ -49,14 +49,17 @@ public class InputListener implements Runnable{
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
 			// waits here to read an object, then sends the object to the observer
+			
 			notify(ois.readObject());
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Client Disconnected");
+			break;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			break;
 		}
 		}
 	}
@@ -68,7 +71,7 @@ public class InputListener implements Runnable{
 		{
 			// even tho theres only one observer, the example works like this
 			// this will need to work with both messages and game events
-			observer.propertyChange(new PropertyChangeEvent(this, null, object, object);
+			observer.propertyChange(new PropertyChangeEvent(this, null, object, object));
 		}
 		
 	}

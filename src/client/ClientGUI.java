@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Date;
 
 import com.sun.prism.paint.Color;
 
@@ -35,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utility.InputListener;
+import utility.Message;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
@@ -142,8 +144,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			@Override
 			public void handle(ActionEvent arg0) {
 				
-				String msg = msgTf.getText() + "\n";
-				chatBoxTa.appendText(msg);
+				Message message = new Message(username, msgTf.getText(), new Date());
+				chatBoxTa.appendText(message.toString());
 				msgTf.clear();
 				
 			}
@@ -153,8 +155,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 		scene2 = new Scene(screen, 1000, 600);
 		
-		window.setScene(scene2); //sets default scene to scene1 on launch
-		window.setTitle("Rock, Paper, Scissors"); //sets title of the window
+		window.setScene(scene1); //sets default scene to scene1 on launch
+		window.setTitle("Login"); //sets title of the window
 		window.show(); //shows everything on the window
 	}
 
