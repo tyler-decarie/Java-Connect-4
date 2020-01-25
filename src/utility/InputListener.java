@@ -18,12 +18,11 @@ public class InputListener implements Runnable{
 	//attributes
 	private Socket socket;
 	private ObjectInputStream ois;
-	private int number = 0;
+	private int number;
 	private List<PropertyChangeListener> observers = new ArrayList<PropertyChangeListener>();
 	
 	//number 0 if this one
 	public InputListener(Socket socket, PropertyChangeListener observer) {
-		
 		this.socket = socket;
 		observers.add(observer);
 		
@@ -43,11 +42,17 @@ public class InputListener implements Runnable{
 
 	@Override
 	public void run() {
+		try {
+			ois = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// runs infinitely, needs to accept every input
 		while (true) {
 		
 		try {
-			ois = new ObjectInputStream(socket.getInputStream());
+			
 			// waits here to read an object, then sends the object to the observer
 			
 			notify(ois.readObject());
@@ -71,7 +76,7 @@ public class InputListener implements Runnable{
 		{
 			// even tho theres only one observer, the example works like this
 			// this will need to work with both messages and game events
-			observer.propertyChange(new PropertyChangeEvent(this, null, object, object));
+			observer.propertyChange(new PropertyChangeEvent(this, null, object, null));
 		}
 		
 	}

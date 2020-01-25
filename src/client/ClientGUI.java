@@ -164,6 +164,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 			lis = new InputListener(socket, this);
 			
+			new Thread(lis).start();
+			
 		} catch (UnknownHostException e) {
 			
 			//failLbl.setText("Failed to connect");
@@ -184,17 +186,13 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	// inputListener will send the object to the gui through here,
 	// needs to work with messages and game events 
 	public void propertyChange(PropertyChangeEvent event) {
-		
-		//
-		String propertyChanged = (String)event.getPropertyName();
-		int oldValue = (Integer)event.getOldValue();
-		int newValue = (Integer)event.getNewValue();
-		System.out.println(oldValue);
-		if(propertyChanged.equals("Message"))
+				
+		System.out.println(event.getOldValue());
+		if()
 		{			
 			// send message to the chat box
 		}
-		else if (propertyChanged.equals("Input"))
+		else if ()
 		{
 			// make changes to the game board
 		}
