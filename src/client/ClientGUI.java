@@ -38,6 +38,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	Socket socket;
 	ObjectOutputStream oos;
 	InputListener lis;
+	TextArea chatBoxTa;
+	
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -110,7 +112,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		screen.add(playArea, 0, 0); //adds the pane to the grid in column 0, row 0
 		
 		VBox chatArea = new VBox(20); //creates vertical box layout with a gap of 20 between items
-		TextArea chatBoxTa = new TextArea(); //creates text area for chat to display in
+		chatBoxTa = new TextArea(); //creates text area for chat to display in
 		chatBoxTa.setMinSize(252, 360); //sets the size of the text area
 		chatBoxTa.setEditable(false); //sets textarea so you cant type in it
 		TextField msgTf = new TextField(); //creates textfield to type message to be sent
@@ -187,15 +189,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	// needs to work with messages and game events 
 	public void propertyChange(PropertyChangeEvent event) {
 				
-		System.out.println(event.getOldValue());
-		if()
-		{			
-			// send message to the chat box
-		}
-		else if ()
-		{
-			// make changes to the game board
-		}
+		Message message = (Message) event.getOldValue();
+		chatBoxTa.appendText(message.toString());
 		
 	}
 	

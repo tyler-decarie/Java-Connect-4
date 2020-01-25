@@ -99,6 +99,6 @@ public class Message implements Serializable
 	public String toString()
 	{
 		return "User Name: "+user+"        "+"Date and Time: "+timeStamp+
-				"\nMessage: "+msg;
+				"\nMessage: "+msg + "\n";
 	}
 }
