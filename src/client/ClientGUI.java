@@ -1,6 +1,5 @@
 package client;
 
-import java.awt.List;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -10,8 +9,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Date;
 
-import com.sun.prism.paint.Color;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,19 +16,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -145,6 +133,12 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			public void handle(ActionEvent arg0) {
 				
 				Message message = new Message(username, msgTf.getText(), new Date());
+				try {
+					oos.writeObject(message);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				chatBoxTa.appendText(message.toString());
 				msgTf.clear();
 				
@@ -195,7 +189,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		String propertyChanged = (String)event.getPropertyName();
 		int oldValue = (Integer)event.getOldValue();
 		int newValue = (Integer)event.getNewValue();
-		
+		System.out.println(oldValue);
 		if(propertyChanged.equals("Message"))
 		{			
 			// send message to the chat box

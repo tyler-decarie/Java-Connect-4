@@ -34,12 +34,12 @@ public class InputListener implements Runnable{
 	public InputListener(int number, Socket socket, PropertyChangeListener observer) {
 		
 		this.socket = socket;
-		this.number = number;
+		this.setNumber(number);
 		observers.add(observer);
 		
 	}
 	
-
+	
 
 	@Override
 	public void run() {
@@ -74,6 +74,16 @@ public class InputListener implements Runnable{
 			observer.propertyChange(new PropertyChangeEvent(this, null, object, object));
 		}
 		
+	}
+
+
+	public int getNumber() {
+		return number;
+	}
+
+
+	public void setNumber(int number) {
+		this.number = number;
 	}
 
 }
