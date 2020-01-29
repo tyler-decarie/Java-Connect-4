@@ -7,7 +7,9 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -21,6 +23,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utility.InputListener;
@@ -32,21 +37,39 @@ import javafx.scene.control.TextField;
 public class ClientGUI extends Application implements PropertyChangeListener{
 
 	Stage window; //stage is the whole window
-	Scene scene1, scene2; //scenes are the content within the window
+	Scene loginScene, gameScene; //scenes are the content within the window
 	String ip;
 	String username;
 	Socket socket;
 	ObjectOutputStream oos;
 	InputListener lis;
 	TextArea chatBoxTa;
+	GridPane pieces;
+	Circle gamePiece;
 	
+	private static final int ROWS = 6;
+	private static final int COLUMNS = 7;
+	
+	ArrayList<Integer> pieceInRow = new ArrayList<Integer>(ROWS - 1);
+	ArrayList<Integer> pieceInColumn = new ArrayList<Integer>(COLUMNS - 1);
+
+	boolean redsTurn = true;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
 		window = primaryStage;
 		
-		//scene1 stuff
+		createLoginWindow();
+		createGameWindow();
+		
+		window.setScene(gameScene); //sets default scene to scene1 on launch
+		window.show(); //shows everything on the window
+	}
+	
+	
+	
+	public void createLoginWindow() {
 		
 		Label ipLbl = new Label("IP Address"); //makes new lbl for ip
 		TextField ipTf = new TextField(); //makes new tf for ip
@@ -85,46 +108,52 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 					
 					connect();
 					
-					
-					
 				} 
 			}
 		}); 	
 		
 		
-
-		scene1 = new Scene(grid, 400, 400); //adds everything to the scene
+		window.setTitle("Connect 4 - Login"); //sets title of the window
+		loginScene = new Scene(grid, 400, 400); //adds everything to the scene
 		
-		//end of scene1 stuff
-		
-		//start of scene 2 shit
+	}
+	
+	
+	public void createGameWindow() {
 		
 		GridPane screen = new GridPane(); //creates new gridpane of the whole scene
 		screen.setStyle("-fx-border-color: black"); //styles border black
 		screen.setPadding(new Insets(20)); //gives padding of 20 on each side
 		screen.setVgap(20); //sets vertical gap of 20 between items in the grid
-		screen.setHgap(24); //sets horizontal gap of 24 between items in grid
+		screen.setHgap(90); //sets horizontal gap of 24 between items in grid
 		
 		BorderPane playArea = new BorderPane();  //creates new borderpane for the playArea(top left)
 		playArea.setPadding(new Insets(12)); //gives padding of 12 on each side
-		playArea.setStyle("-fx-background-color: #ddd; -fx-border-color: #000000");
-		playArea.setPrefSize(700, 400); //sets the size of the pane
+		playArea.setStyle("-fx-background-color: #00B2EE; -fx-border-color: #000000");
+		playArea.setPrefSize(740, 480); //sets the size of the pane (width, height)
+		playArea.getChildren().addAll(createPlayArea()); //creates grid for game pieces
+		playArea.getChildren().addAll(createColumnOverlay());
+		
+		
 		screen.add(playArea, 0, 0); //adds the pane to the grid in column 0, row 0
 		
-		VBox chatArea = new VBox(20); //creates vertical box layout with a gap of 20 between items
-		chatBoxTa = new TextArea(); //creates text area for chat to display in
-		chatBoxTa.setMinSize(252, 360); //sets the size of the text area
-		chatBoxTa.setEditable(false); //sets textarea so you cant type in it
-		TextField msgTf = new TextField(); //creates textfield to type message to be sent
-		msgTf.setMinWidth(300);  //sets width of textfield
-		Button msgButton = new Button("Send"); //creates button to send message
-		HBox msgArea = new HBox(12); //creates horizontal box layout with gap of 12 between items
 		
+		VBox chatArea = new VBox(20); //creates vertical box layout with a gap of 20 between items
+		
+		chatBoxTa = new TextArea(); //creates text area for chat to display in
+		chatBoxTa.setMinSize(310, 360); //sets the size of the text area
+		chatBoxTa.setEditable(false); //sets textarea so you cant type in it
+		
+		HBox msgArea = new HBox(12); //creates horizontal box layout with gap of 12 between items
+		TextField msgTf = new TextField(); //creates textfield to type message to be sent
+		msgTf.setMinWidth(255);  //sets width of textfield
+		Button msgButton = new Button("Send"); //creates button to send message
 		//adds the textfield and button to the horizontal box layout
 		msgArea.getChildren().addAll(msgTf, msgButton);
 		
 		//adds the textarea and horizontal box layout into the vertical box layout
 		chatArea.getChildren().addAll(chatBoxTa, msgArea);
+		
 		screen.add(chatArea, 1, 0); //adds the parents vertical box layout to the gridpane in column 1, row 0
 		
 		//event handler to display messages in textarea when the send button is clicked
@@ -148,14 +177,82 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 		});
 		
+		window.setTitle("Connect 4" + " - " + username); //sets title of the window
+		gameScene = new Scene(screen, 1000, 600);
 		
-		scene2 = new Scene(screen, 1000, 600);
-		
-		window.setScene(scene1); //sets default scene to scene1 on launch
-		window.setTitle("Login"); //sets title of the window
-		window.show(); //shows everything on the window
 	}
-
+	
+	
+	public GridPane createPlayArea() {
+		
+		//creates grid for pieces
+		pieces = new GridPane();
+		pieces.setPadding(new Insets(10));
+		pieces.setHgap(10);
+		pieces.setVgap(10);
+				
+		for(int x = 0; x < COLUMNS; x++) {
+					
+			for(int y = 0; y < ROWS; y++) {
+						
+				gamePiece = new Circle();
+				gamePiece.setFill(Color.LIGHTGRAY);
+				gamePiece.setRadius(34);
+				pieces.add(gamePiece, x, y);
+				
+				
+				gamePiece.setOnMouseClicked(e -> placeGamePiece(gamePiece));
+			}
+		}
+		
+		return pieces;
+		
+	}
+	
+	/**
+	 * Creates a overlay of rectangles so the user knows where theyre going to place a game piece
+	 * @return GridPane layout with seven rectangles to the playArea
+	 */
+	public GridPane createColumnOverlay(){
+		
+		GridPane columns = new GridPane();
+		columns.setPadding(new Insets(0, 10, 0, 10));
+		columns.setHgap(10);
+		
+		//creates 7 rectangles for the 7 columns
+		for(int i = 0; i < COLUMNS; i++) {
+			
+			Rectangle rect = new Rectangle(68, 480);
+			rect.setFill(Color.TRANSPARENT);
+			
+			//when hovering mouse over a rectangle it will change its color
+			rect.setOnMouseEntered(e -> rect.setFill(Color.rgb(200, 200, 50, 0.3)));
+			//when mouse isnt hovering it will make it transparent again
+			rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
+			
+			columns.add(rect, i, 0);
+			
+		}
+		
+		return columns;
+		
+	}
+	
+	
+	public void placeGamePiece(Circle gamePiece) {
+		
+		if(redsTurn) {
+			
+			gamePiece.setFill(Color.RED);
+			
+		}else {
+			
+			gamePiece.setFill(Color.YELLOW);
+			
+		}
+		
+	}
+	
 	
 	public void connect() {
 		try {
@@ -181,7 +278,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		}
 		
 		
-		window.setScene(scene2);
+		window.setScene(gameScene);
 	}
 	
 	@Override
