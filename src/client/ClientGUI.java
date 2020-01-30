@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -30,6 +31,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utility.InputListener;
 import utility.Message;
+import utility.Piece;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
@@ -45,13 +48,14 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	InputListener lis;
 	TextArea chatBoxTa;
 	GridPane pieces;
-	Circle gamePiece;
+	
 	
 	private static final int ROWS = 6;
 	private static final int COLUMNS = 7;
 	
 	ArrayList<Integer> pieceInRow = new ArrayList<Integer>(ROWS - 1);
 	ArrayList<Integer> pieceInColumn = new ArrayList<Integer>(COLUMNS - 1);
+	Piece[][] pieceArray = new Piece[6][7];
 
 	boolean redsTurn = true;
 	
@@ -132,7 +136,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		playArea.setStyle("-fx-background-color: #00B2EE; -fx-border-color: #000000");
 		playArea.setPrefSize(740, 480); //sets the size of the pane (width, height)
 		playArea.getChildren().addAll(createPlayArea()); //creates grid for game pieces
-		playArea.getChildren().addAll(createColumnOverlay());
+		//playArea.getChildren().addAll(createColumnOverlay());
 		
 		
 		screen.add(playArea, 0, 0); //adds the pane to the grid in column 0, row 0
@@ -191,15 +195,14 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		pieces.setHgap(10);
 		pieces.setVgap(10);
 				
-		for(int x = 0; x < COLUMNS; x++) {
+		for(int y = 0; y< COLUMNS; y++) {
 					
-			for(int y = 0; y < ROWS; y++) {
-						
-				gamePiece = new Circle();
+			for(int x = 0; x < ROWS; x++) {
+				Piece gamePiece = new Piece(x,y);
 				gamePiece.setFill(Color.LIGHTGRAY);
 				gamePiece.setRadius(34);
-				pieces.add(gamePiece, x, y);
-				
+				pieceArray[x][y] = gamePiece;
+				pieces.add(gamePiece, y, x);
 				
 				gamePiece.setOnMouseClicked(e -> placeGamePiece(gamePiece));
 			}
@@ -239,21 +242,38 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	}
 	
 	
-	public void placeGamePiece(Circle gamePiece) {
+	public void placeGamePiece(Piece gamePiece) {
+		boolean placed = false;
 		
-		if(redsTurn) {
-			
-			gamePiece.setFill(Color.RED);
-			
-		}else {
-			
-			gamePiece.setFill(Color.YELLOW);
+		System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
+
+		Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
+		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+			//column filled, do not allow placement
+		}
+		else {
+		for (int x = 0; x < ROWS; x++) {
+			checkPiece = pieceArray[x][checkPiece.getyCord()];
+			if(checkPiece.getFill() == Color.LIGHTGRAY) {
+				
+				gamePiece = checkPiece;
+			}
 			
 		}
-		
+		//System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
+		if (redsTurn) {
+			
+			gamePiece.setFill(Color.RED);
+		}
+		else {
+			gamePiece.setFill(Color.YELLOW);
+		}
+		}
 	}
 	
 	
+
+
 	public void connect() {
 		try {
 			
