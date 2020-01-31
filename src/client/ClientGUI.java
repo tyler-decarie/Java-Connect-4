@@ -57,7 +57,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	ArrayList<Integer> pieceInColumn = new ArrayList<Integer>(COLUMNS - 1);
 	Piece[][] pieceArray = new Piece[6][7];
 
-	boolean redsTurn = true;
+	boolean redsTurn;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -67,7 +67,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		createLoginWindow();
 		createGameWindow();
 		
-		window.setScene(gameScene); //sets default scene to scene1 on launch
+		window.setScene(loginScene); //sets default scene to scene1 on launch
 		window.show(); //shows everything on the window
 	}
 	
@@ -243,13 +243,12 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	
 	
 	public void placeGamePiece(Piece gamePiece) {
-		boolean placed = false;
 		
-		System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
-
+		
 		Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
-		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
-			//column filled, do not allow placement
+		//this if will stop the player from selecting a column that is already full, doesnt work yet
+		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) { 
+			System.out.println("Column filled dum dum");
 		}
 		else {
 		for (int x = 0; x < ROWS; x++) {
@@ -260,7 +259,6 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			}
 			
 		}
-		//System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
 		if (redsTurn) {
 			
 			gamePiece.setFill(Color.RED);

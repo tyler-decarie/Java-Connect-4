@@ -48,6 +48,7 @@ public class InputListener implements Runnable{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
 		// runs infinitely, needs to accept every input
 		while (true) {
 		
