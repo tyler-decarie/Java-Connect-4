@@ -10,31 +10,31 @@ public class Piece extends Circle implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int xCord;
-	int yCord;
+	int row;
+	int column;
 	
 	public Piece() {
 		
 	}
 	public Piece(int x, int y) {
-		this.xCord = x;
-		this.yCord = y;
+		this.row = y;
+		this.column = x;
 	}
-	public int getxCord() {
-		return xCord;
+	public int getColumn() {
+		return column;
 	}
-	public void setxCord(int xCord) {
-		this.xCord = xCord;
+	public void setColumn(int column) {
+		this.column = column;
 	}
-	public int getyCord() {
-		return yCord;
+	public int getRow() {
+		return row;
 	}
-	public void setyCord(int yCord) {
-		this.yCord = yCord;
+	public void setRow(int row) {
+		this.row = row;
 	}
 	@Override
 	public String toString() {
-		return "Piece: xCord=" + xCord + ", yCord=" + yCord;
+		return "Piece: xCord=" + column + ", yCord=" + row;
 	}
 	
 }

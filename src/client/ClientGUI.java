@@ -45,10 +45,10 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	BorderPane playArea;
 	
 	
-	private static final int ROWS = 6;
+	private static final int ROWS = 6; 
 	private static final int COLUMNS = 7;
 	
-	Rectangle[] rectArray = new Rectangle[7];
+	Rectangle[] rectArray = new Rectangle[COLUMNS];
 	Piece[][] pieceArray = new Piece[ROWS][COLUMNS]; //[rows][columns]
 
 	boolean redsTurn = true;
@@ -265,9 +265,9 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 				
 			}
 			
-				
+				System.out.println(checkPiece.getColumn() + "," + checkPiece.getRow());
 				checkPiece.setFill(Color.RED);
-				playArea.setDisable(true);
+				//playArea.setDisable(true);
 				try {
 					oos.writeObject(checkPiece);
 				} catch (IOException e) {
@@ -282,23 +282,31 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 	private void checkWin(Piece checkPiece) {
 		if (checkLeft(checkPiece) || checkRight(checkPiece) ||
-		checkUp(checkPiece) || checkDown(checkPiece) || checkUpLeft(checkPiece) ||
+		 checkDown(checkPiece) || checkUpLeft(checkPiece) ||
 		checkUpRight(checkPiece) || checkDownLeft(checkPiece) || checkDownRight(checkPiece)) {
-			
+			System.out.println("you win");
 		}
 		
 	}
 
 	private boolean checkDownRight(Piece checkPiece) {
+		boolean check = true;
+		Piece refPiece = checkPiece;
+		for (int i = 1; i < 3; i++) {
+			refPiece = pieceArray[refPiece.getRow()+i][refPiece.getColumn()+i];
+			if (!(refPiece.getFill() == Color.RED)) {
+				check = false;
+			}
+		}
 		
-		
-		return false;		
+		return check;		
 	}
 
 
 
 	private boolean checkDownLeft(Piece checkPiece) {
-		
+		boolean check = false;
+
 		
 		return false;		
 	}
@@ -306,7 +314,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 
 	private boolean checkUpRight(Piece checkPiece) {
-		
+		boolean check = false;
+
 		
 		return false;		
 	}
@@ -314,7 +323,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 
 	private boolean checkUpLeft(Piece checkPiece) {
-		
+		boolean check = false;
+
 		
 		return false;		
 	}
@@ -322,22 +332,25 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 
 	private boolean checkDown(Piece checkPiece) {
+		boolean check = true;
+		Piece refPiece = checkPiece;
+		for (int i = 1; i < 3; i++) {
+			
+			refPiece = pieceArray[refPiece.getRow()+i][refPiece.getColumn()];
+			
+			if (!(refPiece.getFill() == Color.RED)) {
+				check = false;
+			
+			}
+		}
 		
-		
-		return false;		
+		return check;	
 	}
-
-
-
-	private boolean checkUp(Piece checkPiece) {
 		
-		
-		return false;		
-	}
-
-
+	
 
 	private boolean checkRight(Piece checkPiece) {
+		boolean check = false;
 		
 		
 		return false;		
@@ -378,7 +391,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 		
 		window.setScene(gameScene);
-		playArea.setDisable(true);
+		//playArea.setDisable(true);
 	}
 	
 	@Override
@@ -394,7 +407,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		}
 		else if (toString.contains("Piece"))		 {
 			Piece piece = (Piece) event.getOldValue();
-			piece = pieceArray[piece.getxCord()][piece.getyCord()];
+			piece = pieceArray[piece.getColumn()][piece.getRow()];
 			piece.setFill(Color.YELLOW);
 			playArea.setDisable(false);
 		}
