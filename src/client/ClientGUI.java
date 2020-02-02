@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,9 +55,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	private static final int ROWS = 6;
 	private static final int COLUMNS = 7;
 	
-	ArrayList<Integer> pieceInRow = new ArrayList<Integer>(ROWS - 1);
-	ArrayList<Integer> pieceInColumn = new ArrayList<Integer>(COLUMNS - 1);
-	Piece[][] pieceArray = new Piece[6][7];
+	Rectangle[] rectArray = new Rectangle[7];
+	Piece[][] pieceArray = new Piece[ROWS][COLUMNS]; //[rows][columns]
 
 	boolean redsTurn;
 	
@@ -204,7 +205,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 				pieceArray[x][y] = gamePiece;
 				pieces.add(gamePiece, y, x);
 				
-				gamePiece.setOnMouseClicked(e -> placeGamePiece(gamePiece));
+				//gamePiece.setOnMouseClicked(e -> placeGamePiece(gamePiece));
 			}
 		}
 		
@@ -216,7 +217,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	 * Creates a overlay of rectangles so the user knows where theyre going to place a game piece
 	 * @return GridPane layout with seven rectangles to the playArea
 	 */
-	public GridPane createColumnOverlay(){
+public GridPane createColumnOverlay(){
 		
 		GridPane columns = new GridPane();
 		columns.setPadding(new Insets(0, 10, 0, 10));
@@ -233,8 +234,10 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			//when mouse isnt hovering it will make it transparent again
 			rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
 			
+			rectArray[i] = rect;
 			columns.add(rect, i, 0);
-			
+			int column = i;
+			rect.setOnMouseClicked(e -> placeGamePiece(column, pieceArray));
 		}
 		
 		return columns;
@@ -242,36 +245,67 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	}
 	
 	
-	public void placeGamePiece(Piece gamePiece) {
+public void placeGamePiece(int column, Piece[][] pieceArray) {
+	boolean placed = false;
+	
+	
+	Piece checkPiece = pieceArray[0][column];
+	
+	if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
 		
+		//Column filled if I did this right
 		
-		Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
-		//this if will stop the player from selecting a column that is already full, doesnt work yet
-		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) { 
-			System.out.println("Column filled dum dum");
-		}
-		else {
-		for (int x = 0; x < ROWS; x++) {
-			checkPiece = pieceArray[x][checkPiece.getyCord()];
-			if(checkPiece.getFill() == Color.LIGHTGRAY) {
-				
-				gamePiece = checkPiece;
-			}
+	} else {
+		
+		for(int y = 5; y >= 0; y--) {
 			
+			checkPiece = pieceArray[y][column];
+			
+			if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+				//theres a piece in this spot
+			} else {
+				
+				checkPiece = pieceArray[y][column];
+				
+			}
+			break;
 		}
+		
 		if (redsTurn) {
 			
-			gamePiece.setFill(Color.RED);
+			checkPiece.setFill(Color.RED);
+		} else {
+			checkPiece.setFill(Color.YELLOW);
 		}
-		else {
-			gamePiece.setFill(Color.YELLOW);
-		}
-		}
+		
 	}
 	
 	
-
-
+	
+//	System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
+//
+//	Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
+//	if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+//		//column filled, do not allow placement
+//	} else {
+//		for (int x = 0; x < ROWS; x++) {
+//			checkPiece = pieceArray[x][checkPiece.getyCord()];
+//			
+//			if(checkPiece.getFill() == Color.LIGHTGRAY) {
+//			
+//			gamePiece = checkPiece;
+//			}
+//		
+//		}
+//	//System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
+//		if (redsTurn) {
+//		
+//			gamePiece.setFill(Color.RED);
+//		} else {
+//			gamePiece.setFill(Color.YELLOW);
+//		}
+//	}
+}
 	public void connect() {
 		try {
 			
