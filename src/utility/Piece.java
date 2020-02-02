@@ -1,8 +1,10 @@
 package utility;
 
+import java.io.Serializable;
+
 import javafx.scene.shape.Circle;
 
-public class Piece extends Circle{
+public class Piece extends Circle implements Serializable{
 	
 	int xCord;
 	int yCord;
@@ -25,6 +27,10 @@ public class Piece extends Circle{
 	}
 	public void setyCord(int yCord) {
 		this.yCord = yCord;
+	}
+	@Override
+	public String toString() {
+		return "Piece: xCord=" + xCord + ", yCord=" + yCord;
 	}
 	
 }

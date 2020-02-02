@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,6 +48,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	InputListener lis;
 	TextArea chatBoxTa;
 	GridPane pieces;
+	BorderPane playArea;
 	
 	
 	private static final int ROWS = 6;
@@ -58,7 +57,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	Rectangle[] rectArray = new Rectangle[7];
 	Piece[][] pieceArray = new Piece[ROWS][COLUMNS]; //[rows][columns]
 
-	boolean redsTurn;
+	boolean redsTurn = true;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -132,12 +131,12 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		screen.setVgap(20); //sets vertical gap of 20 between items in the grid
 		screen.setHgap(90); //sets horizontal gap of 24 between items in grid
 		
-		BorderPane playArea = new BorderPane();  //creates new borderpane for the playArea(top left)
+		playArea = new BorderPane();  //creates new borderpane for the playArea(top left)
 		playArea.setPadding(new Insets(12)); //gives padding of 12 on each side
 		playArea.setStyle("-fx-background-color: #00B2EE; -fx-border-color: #000000");
 		playArea.setPrefSize(740, 480); //sets the size of the pane (width, height)
 		playArea.getChildren().addAll(createPlayArea()); //creates grid for game pieces
-		//playArea.getChildren().addAll(createColumnOverlay());
+		playArea.getChildren().addAll(createColumnOverlay());
 		
 		
 		screen.add(playArea, 0, 0); //adds the pane to the grid in column 0, row 0
@@ -148,6 +147,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		chatBoxTa = new TextArea(); //creates text area for chat to display in
 		chatBoxTa.setMinSize(310, 360); //sets the size of the text area
 		chatBoxTa.setEditable(false); //sets textarea so you cant type in it
+		chatBoxTa.setWrapText(true);
 		
 		HBox msgArea = new HBox(12); //creates horizontal box layout with gap of 12 between items
 		TextField msgTf = new TextField(); //creates textfield to type message to be sent
@@ -182,7 +182,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 		});
 		
-		window.setTitle("Connect 4" + " - " + username); //sets title of the window
+		window.setTitle("Connect 4"); //sets title of the window
 		gameScene = new Scene(screen, 1000, 600);
 		
 	}
@@ -196,7 +196,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		pieces.setHgap(10);
 		pieces.setVgap(10);
 				
-		for(int y = 0; y< COLUMNS; y++) {
+		for(int y = 0; y < COLUMNS; y++) {
 					
 			for(int x = 0; x < ROWS; x++) {
 				Piece gamePiece = new Piece(x,y);
@@ -217,7 +217,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	 * Creates a overlay of rectangles so the user knows where theyre going to place a game piece
 	 * @return GridPane layout with seven rectangles to the playArea
 	 */
-public GridPane createColumnOverlay(){
+	public GridPane createColumnOverlay(){
 		
 		GridPane columns = new GridPane();
 		columns.setPadding(new Insets(0, 10, 0, 10));
@@ -245,67 +245,78 @@ public GridPane createColumnOverlay(){
 	}
 	
 	
-public void placeGamePiece(int column, Piece[][] pieceArray) {
-	boolean placed = false;
-	
-	
-	Piece checkPiece = pieceArray[0][column];
-	
-	if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+	public void placeGamePiece(int column, Piece[][] pieceArray) {
+		boolean placed = false;
 		
-		//Column filled if I did this right
 		
-	} else {
+		Piece checkPiece = pieceArray[0][column];
 		
-		for(int y = 5; y >= 0; y--) {
+		if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
 			
-			checkPiece = pieceArray[y][column];
+			//Column filled if I did this right
 			
-			if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
-				//theres a piece in this spot
-			} else {
+		} else {
+			
+			for(int y = 5; y >= 0; y--) {
 				
 				checkPiece = pieceArray[y][column];
 				
+				if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+					//theres a piece in this spot
+				} else {
+					
+					checkPiece = pieceArray[y][column];
+					break;
+				}
+				
 			}
-			break;
-		}
-		
-		if (redsTurn) {
 			
-			checkPiece.setFill(Color.RED);
-		} else {
-			checkPiece.setFill(Color.YELLOW);
+			if (redsTurn) {
+				
+				checkPiece.setFill(Color.RED);
+				playArea.setDisable(true);
+				try {
+					oos.writeObject(checkPiece);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				checkPiece.setFill(Color.YELLOW);
+			}
+			
 		}
 		
+		
+		
+//		System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
+//
+//		Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
+//		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+//			//column filled, do not allow placement
+//		} else {
+//			for (int x = 0; x < ROWS; x++) {
+//				checkPiece = pieceArray[x][checkPiece.getyCord()];
+//				
+//				if(checkPiece.getFill() == Color.LIGHTGRAY) {
+//				
+//				gamePiece = checkPiece;
+//				}
+//			
+//			}
+//		//System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
+//			if (redsTurn) {
+//			
+//				gamePiece.setFill(Color.RED);
+//			} else {
+//				gamePiece.setFill(Color.YELLOW);
+//			}
+//		}
 	}
 	
 	
-	
-//	System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
-//
-//	Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
-//	if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
-//		//column filled, do not allow placement
-//	} else {
-//		for (int x = 0; x < ROWS; x++) {
-//			checkPiece = pieceArray[x][checkPiece.getyCord()];
-//			
-//			if(checkPiece.getFill() == Color.LIGHTGRAY) {
-//			
-//			gamePiece = checkPiece;
-//			}
-//		
-//		}
-//	//System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
-//		if (redsTurn) {
-//		
-//			gamePiece.setFill(Color.RED);
-//		} else {
-//			gamePiece.setFill(Color.YELLOW);
-//		}
-//	}
-}
+
+
 	public void connect() {
 		try {
 			
@@ -337,9 +348,19 @@ public void placeGamePiece(int column, Piece[][] pieceArray) {
 	// inputListener will send the object to the gui through here,
 	// needs to work with messages and game events 
 	public void propertyChange(PropertyChangeEvent event) {
-				
-		Message message = (Message) event.getOldValue();
-		chatBoxTa.appendText(message.toString());
+		
+		String toString = event.getOldValue().toString();
+		
+		if (toString.contains("Message")) {
+			Message message = (Message) event.getOldValue();
+			chatBoxTa.appendText(message.toString());
+		}
+		else if (toString.contains("Piece"))		 {
+			Piece piece = (Piece) event.getOldValue();
+			piece = pieceArray[piece.getxCord()][piece.getyCord()];
+			piece.setFill(Color.YELLOW);
+		}
+		
 		
 	}
 	
