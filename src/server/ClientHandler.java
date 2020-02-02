@@ -3,12 +3,11 @@ package server;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Random;
 
 import utility.InputListener;
-import utility.Message;
 
 public class ClientHandler implements Runnable, PropertyChangeListener {
 
@@ -21,7 +20,9 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 	
 	
 	public ClientHandler(Socket socket1, Socket socket2) {
-		
+		Random rand = new Random();
+		int chooseFirst = rand.nextInt(1);
+		System.out.println(chooseFirst);
 		this.socket1 = socket1;
 		this.socket2 = socket2;
 		
@@ -37,6 +38,29 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 		
 		lis1 = new InputListener(1, socket1, this);
 		lis2 = new InputListener(2, socket2, this);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if (chooseFirst == 0) {
+			try {
+				oos2.writeObject("YOU-GO-FIRST");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if (chooseFirst == 1) {
+			try {
+				oos1.writeObject("YOU-GO-FIRST");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 

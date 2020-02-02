@@ -7,12 +7,8 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,14 +21,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utility.InputListener;
 import utility.Message;
 import utility.Piece;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
@@ -246,7 +240,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	
 	
 	public void placeGamePiece(int column, Piece[][] pieceArray) {
-		boolean placed = false;
+
 		
 		
 		Piece checkPiece = pieceArray[0][column];
@@ -342,6 +336,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 		
 		window.setScene(gameScene);
+		playArea.setDisable(true);
 	}
 	
 	@Override
@@ -350,7 +345,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	public void propertyChange(PropertyChangeEvent event) {
 		
 		String toString = event.getOldValue().toString();
-		
+		System.out.println(toString);
 		if (toString.contains("Message")) {
 			Message message = (Message) event.getOldValue();
 			chatBoxTa.appendText(message.toString());
@@ -359,6 +354,11 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			Piece piece = (Piece) event.getOldValue();
 			piece = pieceArray[piece.getxCord()][piece.getyCord()];
 			piece.setFill(Color.YELLOW);
+			playArea.setDisable(false);
+		}
+		else if (toString.contains("YOU-GO-FIRST")) {
+			
+			playArea.setDisable(false);
 		}
 		
 		

@@ -6,6 +6,10 @@ import javafx.scene.shape.Circle;
 
 public class Piece extends Circle implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int xCord;
 	int yCord;
 	
