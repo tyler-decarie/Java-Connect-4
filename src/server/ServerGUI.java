@@ -6,30 +6,42 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ServerGUI extends Application {
 
     Stage window;
+    Scene serverScene;
+    static TextArea serverOutputTA;
 
     @Override
-    public void start(Stage arg0) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
 
-        ServerSocket server = null;
+    	ServerSocket server = null;
         Socket socket = null;
-
+        
         ArrayList<Socket> sockets = new ArrayList<>(2);
 
         try {
             server = new ServerSocket(3333);
+            System.out.println("Server up and running!!!!");
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
 
-        System.out.println("Server up and running!!!!");
-
+        
         while(true) {
             try {
                 socket = server.accept();
@@ -46,11 +58,8 @@ public class ServerGUI extends Application {
                 e.printStackTrace();
             }
         }
-
-
-
-
+        
 
     }
-
 }
+//}

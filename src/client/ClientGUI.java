@@ -265,7 +265,6 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 				
 			}
 			
-			if (redsTurn) {
 				
 				checkPiece.setFill(Color.RED);
 				playArea.setDisable(true);
@@ -275,40 +274,83 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} else {
-				checkPiece.setFill(Color.YELLOW);
-			}
+				checkWin(checkPiece);
+			
+		}
+	
+	}
+
+	private void checkWin(Piece checkPiece) {
+		if (checkLeft(checkPiece) || checkRight(checkPiece) ||
+		checkUp(checkPiece) || checkDown(checkPiece) || checkUpLeft(checkPiece) ||
+		checkUpRight(checkPiece) || checkDownLeft(checkPiece) || checkDownRight(checkPiece)) {
 			
 		}
 		
-		
-		
-//		System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
-//
-//		Piece checkPiece = pieceArray[0][gamePiece.getyCord()];
-//		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
-//			//column filled, do not allow placement
-//		} else {
-//			for (int x = 0; x < ROWS; x++) {
-//				checkPiece = pieceArray[x][checkPiece.getyCord()];
-//				
-//				if(checkPiece.getFill() == Color.LIGHTGRAY) {
-//				
-//				gamePiece = checkPiece;
-//				}
-//			
-//			}
-//		//System.out.println(gamePiece.getxCord() + ", " + gamePiece.getyCord());
-//			if (redsTurn) {
-//			
-//				gamePiece.setFill(Color.RED);
-//			} else {
-//				gamePiece.setFill(Color.YELLOW);
-//			}
-//		}
 	}
-	
-	
+
+	private boolean checkDownRight(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkDownLeft(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkUpRight(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkUpLeft(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkDown(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkUp(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkRight(Piece checkPiece) {
+		
+		
+		return false;		
+	}
+
+
+
+	private boolean checkLeft(Piece checkPiece) {
+		
+		
+		return false;
+	}
+
 
 
 	public void connect() {
