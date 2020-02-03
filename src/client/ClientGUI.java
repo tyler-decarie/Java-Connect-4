@@ -49,7 +49,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	private static final int COLUMNS = 7;
 	
 	Rectangle[] rectArray = new Rectangle[COLUMNS];
-	Piece[][] pieceArray = new Piece[ROWS][COLUMNS]; //[rows][columns]
+	Piece[][] pieceArray = new Piece[COLUMNS][ROWS]; //[rows][columns]
 
 	boolean redsTurn = true;
 	
@@ -156,7 +156,6 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		screen.add(chatArea, 1, 0); //adds the parents vertical box layout to the gridpane in column 1, row 0
 		
 		//event handler to display messages in textarea when the send button is clicked
-		//msgButton.setOnAction(e -> chatBoxTa.appendText(msgTf.getText() + "\n"));
 		msgButton.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
@@ -190,16 +189,15 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		pieces.setHgap(10);
 		pieces.setVgap(10);
 				
-		for(int y = 0; y < COLUMNS; y++) {
+		for(int y = 0; y < ROWS; y++) {
 					
-			for(int x = 0; x < ROWS; x++) {
+			for(int x = 0; x < COLUMNS; x++) {
 				Piece gamePiece = new Piece(x,y);
 				gamePiece.setFill(Color.LIGHTGRAY);
 				gamePiece.setRadius(34);
 				pieceArray[x][y] = gamePiece;
-				pieces.add(gamePiece, y, x);
+				pieces.add(gamePiece, x, y);
 				
-				//gamePiece.setOnMouseClicked(e -> placeGamePiece(gamePiece));
 			}
 		}
 		
@@ -243,7 +241,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 		
 		
-		Piece checkPiece = pieceArray[0][column];
+		Piece checkPiece = pieceArray[column][0];
 		
 		if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
 			
@@ -253,13 +251,13 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 			for(int y = 5; y >= 0; y--) {
 				
-				checkPiece = pieceArray[y][column];
+				checkPiece = pieceArray[column][y];
 				
 				if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
 					//theres a piece in this spot
 				} else {
 					
-					checkPiece = pieceArray[y][column];
+					checkPiece = pieceArray[column][y];
 					break;
 				}
 				
@@ -267,7 +265,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 				System.out.println(checkPiece.getColumn() + "," + checkPiece.getRow());
 				checkPiece.setFill(Color.RED);
-				//playArea.setDisable(true);
+				playArea.setDisable(true);
 				try {
 					oos.writeObject(checkPiece);
 				} catch (IOException e) {
@@ -331,37 +329,109 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 
 
-	private boolean checkDown(Piece checkPiece) {
+	private boolean checkDown(Piece currentPiece) {
 		boolean check = true;
-		Piece refPiece = checkPiece;
-		for (int i = 1; i < 3; i++) {
-			
-			refPiece = pieceArray[refPiece.getRow()+i][refPiece.getColumn()];
-			
-			if (!(refPiece.getFill() == Color.RED)) {
-				check = false;
-			
-			}
-		}
-		
-		return check;	
-	}
+        int counter = 1;
+
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
+
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x][y + 1];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                y++;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
+    }
 		
 	
 
-	private boolean checkRight(Piece checkPiece) {
-		boolean check = false;
+	private boolean checkRight(Piece currentPiece) {
 		
+		boolean check = true;
+        int counter = 1;
+
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
+
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x + 1][y];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                x++;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
 		
-		return false;		
 	}
 
 
 
-	private boolean checkLeft(Piece checkPiece) {
-		
-		
-		return false;
+	private boolean checkLeft(Piece currentPiece) {
+		boolean check = true;
+        int counter = 1;
+
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
+
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x - 1][y];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                x--;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
 	}
 
 
@@ -391,7 +461,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 		
 		window.setScene(gameScene);
-		//playArea.setDisable(true);
+		playArea.setDisable(true);
 	}
 	
 	@Override
