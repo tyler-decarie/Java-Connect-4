@@ -43,7 +43,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	TextArea chatBoxTa;
 	GridPane pieces;
 	BorderPane playArea;
-	
+	Label failLbl;
 	
 	private static final int ROWS = 6; 
 	private static final int COLUMNS = 7;
@@ -89,7 +89,8 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		grid.addRow(2, button1);
 		grid.setAlignment(Pos.CENTER);
 		
-		Label failLbl = new Label("");
+		failLbl = new Label("Failed to connect");
+		failLbl.setVisible(false);
 		grid.addRow(3, failLbl);
 		
 		//event handler for connect button click
@@ -447,21 +448,23 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 			new Thread(lis).start();
 			
+			window.setScene(gameScene);
+			playArea.setDisable(true);
+			
 		} catch (UnknownHostException e) {
 			
-			//failLbl.setText("Failed to connect");
+			failLbl.setVisible(true);
 			System.out.println("Failed to Connect");
 			
 		} catch (IOException e) {
 			
-			//failLbl.setText("Failed to connect");
+			failLbl.setVisible(true);
 			System.out.println("Failed to Connect");
 			
 		}
 		
 		
-		window.setScene(gameScene);
-		playArea.setDisable(true);
+		
 	}
 	
 	@Override
