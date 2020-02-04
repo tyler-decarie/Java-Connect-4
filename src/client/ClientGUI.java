@@ -280,167 +280,108 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	}
 
 	private void checkWin(Piece checkPiece) {
-		if (checkLeft(checkPiece) || checkRight(checkPiece) ||
-		 checkDown(checkPiece) || checkUpLeft(checkPiece) ||
-		checkUpRight(checkPiece) || checkDownLeft(checkPiece) || checkDownRight(checkPiece)) {
+		if (checkHorizontal(checkPiece) ||
+		 checkDown(checkPiece) || checkBackDiagonal(checkPiece) ||
+		 checkForwardDiagonal(checkPiece)) {
 			System.out.println("you win");
 		}
 		
 	}
 
-	private boolean checkDownRight(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		boolean check = true;
-        int counter = 1;
+	private boolean checkBackDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+		 int counter = 1;
 
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
+	        int x = currentPiece.getColumn();
+	        int y = currentPiece.getRow();
 
-        for(int i = 0; i < 4; i++) {
+	        for(int i = -3; i < 4; i++) {
+	        	
+	        	if (((x+i)<0) || ((y+i)<0)) {
+	        		i++;
+	        		continue;
+	        	}
+	        	else if (((y+i) > (COLUMNS - 1)) || ((x+i) > (ROWS -1))) {
+	        		break;
+	        	}
 
-            Piece nextPiece = pieceArray[x + 1][y + 1];
+	            Piece nextPiece = pieceArray[x + i][y + i];
 
-            if(!(nextPiece.getFill() == Color.RED)) {
+	            if(!(nextPiece.getFill() == Color.RED)) {
 
-                check = false;
-                counter = 1;
-                break;
-                
-            } else {
-            	
-            	counter++;
-                y++;
-                x++;
-            	
-            }
+	                counter = 1;
+	                
+	            } else {
+	            	
+	            	counter++;
+	                x++;
+	            	
+	            }
 
-            if (counter == 4) {
-                return check;
-            }
+	            if (counter == 4) {
+	                return true;
+	            }
 
-        }
+	        }
 
-        return check;
-    }
+	        return false;
+			
+		}
 
-	private boolean checkDownLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		boolean check = true;
-        int counter = 1;
+	private boolean checkForwardDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+		 int counter = 1;
 
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
+	        int x = currentPiece.getColumn();
+	        int y = currentPiece.getRow();
 
-        for(int i = 0; i < 4; i++) {
+	        for(int i = -3; i < 4; i++) {
+	        	
+	        	if (((x+i)<0) || ((y+i)<0)) {
+	        		i++;
+	        		continue;
+	        	}
+	        	else if (((x+i) > (COLUMNS - 1)) || ((y-i) < 0)) {
+	        		break;
+	        	}
 
-            Piece nextPiece = pieceArray[x - 1][y + 1];
+	            Piece nextPiece = pieceArray[x + i][y - i];
 
-            if(!(nextPiece.getFill() == Color.RED)) {
+	            if(!(nextPiece.getFill() == Color.RED)) {
 
-                check = false;
-                counter = 1;
-                break;
-                
-            } else {
-            	
-            	counter++;
-                y++;
-                x--;
-            	
-            }
+	                counter = 1;
+	                
+	            } else {
+	            	
+	            	counter++;
+	                x++;
+	            	
+	            }
 
-            if (counter == 4) {
-                return check;
-            }
+	            if (counter == 4) {
+	                return true;
+	            }
 
-        }
+	        }
 
-        return check;
-    }
-
-
-	private boolean checkUpRight(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		boolean check = true;
-        int counter = 1;
-
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
-
-        for(int i = 0; i < 4; i++) {
-
-            Piece nextPiece = pieceArray[x + 1][y - 1];
-
-            if(!(nextPiece.getFill() == Color.RED)) {
-
-                check = false;
-                counter = 1;
-                break;
-                
-            } else {
-            	
-            	counter++;
-                y--;
-                x++;
-            	
-            }
-
-            if (counter == 4) {
-                return check;
-            }
-
-        }
-
-        return check;
-    }
-
-
-	private boolean checkUpLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		boolean check = true;
-        int counter = 1;
-
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
-
-        for(int i = 0; i < 4; i++) {
-
-            Piece nextPiece = pieceArray[x - 1][y - 1];
-
-            if(!(nextPiece.getFill() == Color.RED)) {
-
-                check = false;
-                counter = 1;
-                break;
-                
-            } else {
-            	
-            	counter++;
-                y--;
-                x--;
-            	
-            }
-
-            if (counter == 4) {
-                return check;
-            }
-
-        }
-
-        return check;
-    }
-
+	        return false;
+			
+		}
 
 	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		boolean check = true;
         int counter = 1;
 
         int x = currentPiece.getColumn();
         int y = currentPiece.getRow();
 
         for(int i = 0; i < 4; i++) {
+        	
+        	if ((y+i) > (ROWS - 1)) {
+        		break;
+        	}
 
             Piece nextPiece = pieceArray[x][y + 1];
 
             if(!(nextPiece.getFill() == Color.RED)) {
 
-                check = false;
                 counter = 1;
                 break;
                 
@@ -452,33 +393,38 @@ public class ClientGUI extends Application implements PropertyChangeListener{
             }
 
             if (counter == 4) {
-                return check;
+                return true;
             }
 
         }
 
-        return check;
+        return false;
     }
 		
 	
 
-	private boolean checkRight(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
 		
-		boolean check = true;
         int counter = 1;
 
         int x = currentPiece.getColumn();
         int y = currentPiece.getRow();
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = -3; i < 4; i++) {
+        	
+        	if ((x+i)<0) {
+        		i++;
+        		continue;
+        	}
+        	else if ((x+i) > (COLUMNS - 1)) {
+        		break;
+        	}
 
-            Piece nextPiece = pieceArray[x + 1][y];
+            Piece nextPiece = pieceArray[x + i][y];
 
             if(!(nextPiece.getFill() == Color.RED)) {
 
-                check = false;
                 counter = 1;
-                break;
                 
             } else {
             	
@@ -488,49 +434,49 @@ public class ClientGUI extends Application implements PropertyChangeListener{
             }
 
             if (counter == 4) {
-                return check;
+                return true;
             }
 
         }
 
-        return check;
+        return false;
 		
 	}
 
 
 
-	private boolean checkLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		boolean check = true;
-        int counter = 1;
-
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
-
-        for(int i = 0; i < 4; i++) {
-
-            Piece nextPiece = pieceArray[x - 1][y];
-
-            if(!(nextPiece.getFill() == Color.RED)) {
-
-                check = false;
-                counter = 1;
-                break;
-                
-            } else {
-            	
-            	counter++;
-                x--;
-            	
-            }
-
-            if (counter == 4) {
-                return check;
-            }
-
-        }
-
-        return check;
-	}
+//	private boolean checkLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+//		boolean check = true;
+//        int counter = 1;
+//
+//        int x = currentPiece.getColumn();
+//        int y = currentPiece.getRow();
+//
+//        for(int i = 0; i < 4; i++) {
+//
+//            Piece nextPiece = pieceArray[x - 1][y];
+//
+//            if(!(nextPiece.getFill() == Color.RED)) {
+//
+//                check = false;
+//                counter = 1;
+//                break;
+//                
+//            } else {
+//            	
+//            	counter++;
+//                x--;
+//            	
+//            }
+//
+//            if (counter == 4) {
+//                return check;
+//            }
+//
+//        }
+//
+//        return check;
+//	}
 
 
 
