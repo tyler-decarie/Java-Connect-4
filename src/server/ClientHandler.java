@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 	}
 	
 	
-	public void propertyChange(PropertyChangeEvent event) {
+	public synchronized void propertyChange(PropertyChangeEvent event) {
 		
 		InputListener il = (InputListener)event.getSource();
 		System.out.println(il.getNumber());
