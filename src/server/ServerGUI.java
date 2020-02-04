@@ -22,7 +22,6 @@ public class ServerGUI extends Application {
 
     Stage window;
     Scene serverScene;
-    static TextArea serverOutputTA;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -58,8 +57,6 @@ public class ServerGUI extends Application {
                 e.printStackTrace();
             }
         }
-        
 
     }
 }
-//}

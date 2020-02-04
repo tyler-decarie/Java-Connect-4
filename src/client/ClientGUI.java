@@ -335,11 +335,11 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 	        for(int i = -3; i < 4; i++) {
 	        	
-	        	if (((x+i)<0) || ((y+i)<0)) {
+	        	if (((x + i) < 0) || ((y - i) > ROWS - 1)) {
 	        		i++;
 	        		continue;
 	        	}
-	        	else if (((x+i) > (COLUMNS - 1)) || ((y-i) < 0)) {
+	        	else if (((x + i) > (COLUMNS - 1)) || ((y - i) < 0)) {
 	        		break;
 	        	}
 
@@ -352,7 +352,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	            } else {
 	            	
 	            	counter++;
-	                x++;
+	                //x++;
 	            	
 	            }
 
@@ -374,7 +374,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
         for(int i = 0; i < 4; i++) {
         	
-        	if ((y+i) > (ROWS - 1)) {
+        	if ((y + i) > (ROWS - 1)) {
         		break;
         	}
 
@@ -405,14 +405,14 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
 		
-        int counter = 1;
+        int counter = 0;
 
         int x = currentPiece.getColumn();
         int y = currentPiece.getRow();
 
         for(int i = -3; i < 4; i++) {
         	
-        	if ((x+i)<0) {
+        	if ((x + i) < 0) {
         		i++;
         		continue;
         	}
@@ -424,12 +424,11 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
             if(!(nextPiece.getFill() == Color.RED)) {
 
-                counter = 1;
+                counter = 0;
                 
             } else {
             	
             	counter++;
-                x++;
             	
             }
 
