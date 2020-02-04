@@ -288,49 +288,146 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 	}
 
-	private boolean checkDownRight(Piece checkPiece) {
+	private boolean checkDownRight(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
 		boolean check = true;
-		Piece refPiece = checkPiece;
-		for (int i = 1; i < 3; i++) {
-			refPiece = pieceArray[refPiece.getRow()+i][refPiece.getColumn()+i];
-			if (!(refPiece.getFill() == Color.RED)) {
-				check = false;
-			}
-		}
-		
-		return check;		
-	}
+        int counter = 1;
+
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
+
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x + 1][y + 1];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                y++;
+                x++;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
+    }
+
+	private boolean checkDownLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+		boolean check = true;
+        int counter = 1;
+
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
+
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x - 1][y + 1];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                y++;
+                x--;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
+    }
 
 
+	private boolean checkUpRight(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+		boolean check = true;
+        int counter = 1;
 
-	private boolean checkDownLeft(Piece checkPiece) {
-		boolean check = false;
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
 
-		
-		return false;		
-	}
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x + 1][y - 1];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                y--;
+                x++;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
+    }
 
 
+	private boolean checkUpLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+		boolean check = true;
+        int counter = 1;
 
-	private boolean checkUpRight(Piece checkPiece) {
-		boolean check = false;
+        int x = currentPiece.getColumn();
+        int y = currentPiece.getRow();
 
-		
-		return false;		
-	}
+        for(int i = 0; i < 4; i++) {
+
+            Piece nextPiece = pieceArray[x - 1][y - 1];
+
+            if(!(nextPiece.getFill() == Color.RED)) {
+
+                check = false;
+                counter = 1;
+                break;
+                
+            } else {
+            	
+            	counter++;
+                y--;
+                x--;
+            	
+            }
+
+            if (counter == 4) {
+                return check;
+            }
+
+        }
+
+        return check;
+    }
 
 
-
-	private boolean checkUpLeft(Piece checkPiece) {
-		boolean check = false;
-
-		
-		return false;		
-	}
-
-
-
-	private boolean checkDown(Piece currentPiece) {
+	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
 		boolean check = true;
         int counter = 1;
 
@@ -365,7 +462,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 		
 	
 
-	private boolean checkRight(Piece currentPiece) {
+	private boolean checkRight(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
 		
 		boolean check = true;
         int counter = 1;
@@ -402,7 +499,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 
 
-	private boolean checkLeft(Piece currentPiece) {
+	private boolean checkLeft(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
 		boolean check = true;
         int counter = 1;
 
