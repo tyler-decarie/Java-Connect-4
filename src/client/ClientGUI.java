@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -264,7 +265,6 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 				
 			}
 			
-				System.out.println(checkPiece.getColumn() + "," + checkPiece.getRow());
 				checkPiece.setFill(Color.RED);
 				playArea.setDisable(true);
 				try {
@@ -280,27 +280,28 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	}
 
 	private void checkWin(Piece checkPiece) {
-		if (checkHorizontal(checkPiece) ||
-		 checkDown(checkPiece) || checkBackDiagonal(checkPiece) ||
-		 checkForwardDiagonal(checkPiece)) {
+		System.out.println(checkPiece.getColumn() + "," + checkPiece.getRow());
+
+		if (checkForwardDiagonal(checkPiece) || checkHorizontal(checkPiece) ||
+		 checkDown(checkPiece) || checkBackDiagonal(checkPiece)) {
 			System.out.println("you win");
 		}
 		
 	}
 
 	private boolean checkBackDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		 int counter = 1;
+		 int counter = 0;
 
 	        int x = currentPiece.getColumn();
 	        int y = currentPiece.getRow();
 
 	        for(int i = -3; i < 4; i++) {
 	        	
-	        	if (((x+i)<0) || ((y+i)<0)) {
+	        	if (((x + i) < 0) || ((y + i) < 0)) {
 	        		i++;
 	        		continue;
 	        	}
-	        	else if (((y+i) > (COLUMNS - 1)) || ((x+i) > (ROWS -1))) {
+	        	else if (((x + i) > (COLUMNS - 1)) || ((y + i) > (ROWS - 1))) {
 	        		break;
 	        	}
 
@@ -308,12 +309,11 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 
 	            if(!(nextPiece.getFill() == Color.RED)) {
 
-	                counter = 1;
+	                counter = 0;
 	                
 	            } else {
 	            	
 	            	counter++;
-	                x++;
 	            	
 	            }
 
@@ -327,46 +327,58 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 			
 		}
 
-	private boolean checkForwardDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		 int counter = 1;
-
-	        int x = currentPiece.getColumn();
-	        int y = currentPiece.getRow();
-
-	        for(int i = -3; i < 4; i++) {
+	private boolean checkForwardDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
+		
+		System.out.println("doesnt get here");
+		 int counter = 0;
+		 ArrayList<Piece> placedPiece = new ArrayList<>();
+	     int x = currentPiece.getColumn();
+	     int y = currentPiece.getRow();
+	     //placedPiece.add(currentPiece);
+	     for(int i = -3; i < 4; i++) {
 	        	
-	        	if (((x + i) < 0) || ((y - i) > ROWS - 1)) {
-	        		i++;
-	        		continue;
-	        	}
-	        	else if (((x + i) > (COLUMNS - 1)) || ((y - i) < 0)) {
-	        		break;
-	        	}
+	        if (((x + i) < 0) || ((y - i) > ROWS - 1)) {
+	        	
+	        	i++;
+	        	continue;
+	        	
+	        }
+	        else if (((x + i) > (COLUMNS - 1)) || ((y - i) < 0)) {
+	        	
+	        	break;
+	        	
+	        }
+	        
+	        Piece nextPiece = pieceArray[x + i][y - i];
+	        
+	        if(!(nextPiece.getFill() == Color.RED)) {
 
-	            Piece nextPiece = pieceArray[x + i][y - i];
-
-	            if(!(nextPiece.getFill() == Color.RED)) {
-
-	                counter = 1;
+	            counter = 0;
 	                
-	            } else {
+	        } else {
 	            	
-	            	counter++;
-	                //x++;
-	            	
-	            }
-
-	            if (counter == 4) {
-	                return true;
-	            }
-
+	            counter++;
+	            placedPiece.add(nextPiece);
+	            System.out.println("counter is at: " + counter);
 	        }
 
-	        return false;
-			
-		}
+	        if (counter == 4) {
+	        	
+	            return true;
+	            
+	        }
 
-	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
+	    }
+	    for(Piece p : placedPiece) {
+	    	
+	    	System.out.println("placed pieces: " + p.toString());
+	    }
+	    return false;
+			
+	}
+
+	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
+		
         int counter = 1;
 
         int x = currentPiece.getColumn();
@@ -375,16 +387,22 @@ public class ClientGUI extends Application implements PropertyChangeListener{
         for(int i = 0; i < 4; i++) {
         	
         	if ((y + i) > (ROWS - 1)) {
-        		break;
+        		//break;
+        		return false;
         	}
 
+        	
+        	if(y >= ROWS - 1) {
+        		return false;
+        	}
+        	
             Piece nextPiece = pieceArray[x][y + 1];
-
+            
             if(!(nextPiece.getFill() == Color.RED)) {
 
                 counter = 1;
-                break;
-                
+                //break;
+                return false;
             } else {
             	
             	counter++;
@@ -393,6 +411,7 @@ public class ClientGUI extends Application implements PropertyChangeListener{
             }
 
             if (counter == 4) {
+            	
                 return true;
             }
 
