@@ -9,7 +9,7 @@ public class ServerObject implements Runnable{
 		
 	@Override
 	public void run() {
-		
+		int counter = 1;
 		ServerSocket server = null;
 	    Socket socket = null;
 	        
@@ -18,6 +18,7 @@ public class ServerObject implements Runnable{
 	    try {
 	        server = new ServerSocket(3333);
 	        System.out.println("Server up and running!!!!");
+	        ServerGUI.writeToTextArea("Server is up and running!");
 	    }
 	    catch (IOException e) {
 	        e.printStackTrace();
@@ -31,6 +32,7 @@ public class ServerObject implements Runnable{
 
 	            if(sockets.size() == 2) {
 	                new Thread(new ClientHandler(sockets.get(0), sockets.get(1))).start();
+	                ServerGUI.writeToTextArea("Clients Paired. Game " + counter++ + " started.");
 	                sockets.clear();
 	            }
 

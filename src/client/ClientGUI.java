@@ -25,17 +25,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import utility.InputListener;
 import utility.Message;
 import utility.Piece;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
+/**
+ * @author Tyler Decarie, Travis Brady
+ * 
+ */
+public class ClientGUI extends Application implements PropertyChangeListener {
 
-public class ClientGUI extends Application implements PropertyChangeListener{
-
-	Stage window; //stage is the whole window
-	Scene loginScene, gameScene; //scenes are the content within the window
+	Stage window; // stage is the whole window
+	Scene loginScene, gameScene; // scenes are the content within the window
 	String ip;
 	String username;
 	Socket socket;
@@ -45,124 +49,121 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 	GridPane pieces;
 	BorderPane playArea;
 	Label failLbl;
-	
-	private static final int ROWS = 6; 
+
+	private static final int ROWS = 6;
 	private static final int COLUMNS = 7;
-	
+
 	Rectangle[] rectArray = new Rectangle[COLUMNS];
-	Piece[][] pieceArray = new Piece[COLUMNS][ROWS]; //[rows][columns]
+	Piece[][] pieceArray = new Piece[COLUMNS][ROWS]; // [rows][columns]
 
 	boolean redsTurn = true;
-	
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
+
 		window = primaryStage;
-		
+
 		createLoginWindow();
 		createGameWindow();
-		
-		window.setScene(loginScene); //sets default scene to scene1 on launch
-		window.show(); //shows everything on the window
+
+		window.setScene(loginScene); // sets default scene to scene1 on launch
+		window.show(); // shows everything on the window
 	}
-	
-	
-	
+
+	/**
+	 *  
+	 */
 	public void createLoginWindow() {
-		
-		Label ipLbl = new Label("IP Address"); //makes new lbl for ip
-		TextField ipTf = new TextField(); //makes new tf for ip
-		Label nameLbl = new Label("Username"); //makes new lbl for name
-		TextField nameTf = new TextField(); //makes new tf for name
-		Button button1 = new Button("Connect"); //makes new button
-		
-		button1.setPrefSize(85, 35); //sets button size
+
+		Label ipLbl = new Label("IP Address"); // makes new lbl for ip
+		TextField ipTf = new TextField(); // makes new tf for ip
+		Label nameLbl = new Label("Username"); // makes new lbl for name
+		TextField nameTf = new TextField(); // makes new tf for name
+		Button button1 = new Button("Connect"); // makes new button
+
+		button1.setPrefSize(85, 35); // sets button size
 		Font scene1Font = new Font("Veranda", 18);
-		ipLbl.setFont(scene1Font); 
+		ipLbl.setFont(scene1Font);
 		nameLbl.setFont(scene1Font);
-		
-		//layout of tf's, lbl's and button
+
+		// layout of tf's, lbl's and button
 		GridPane grid = new GridPane();
-		grid.setVgap(8); //sets vertical gap of items in grid
-		grid.setHgap(10);  //sets horizontal gap of items in grid
+		grid.setVgap(8); // sets vertical gap of items in grid
+		grid.setHgap(10); // sets horizontal gap of items in grid
 		grid.addRow(0, ipLbl, ipTf);
 		grid.addRow(1, nameLbl, nameTf);
 		grid.addRow(2, button1);
 		grid.setAlignment(Pos.CENTER);
-		
+
 		failLbl = new Label("Failed to connect");
 		failLbl.setVisible(false);
 		grid.addRow(3, failLbl);
-		
-		//event handler for connect button click
+
+		// event handler for connect button click
 		button1.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent arg0) {
-				
-				//gets text input from textfields
+
+				// gets text input from textfields
 				ip = ipTf.getText();
 				username = nameTf.getText();
-				
-				if(ip.length() != 0 && username.length() != 0) {
-					
+
+				if (ip.length() != 0 && username.length() != 0) {
+
 					connect();
-					
-				} 
+
+				}
 			}
-		}); 	
-		
-		
-		window.setTitle("Connect 4 - Login"); //sets title of the window
-		loginScene = new Scene(grid, 400, 400); //adds everything to the scene
-		
+		});
+
+		window.setTitle("Connect 4 - Login"); // sets title of the window
+		loginScene = new Scene(grid, 400, 400); // adds everything to the scene
+
 	}
-	
-	
+
 	public void createGameWindow() {
-		
-		GridPane screen = new GridPane(); //creates new gridpane of the whole scene
-		screen.setStyle("-fx-border-color: black"); //styles border black
-		screen.setPadding(new Insets(20)); //gives padding of 20 on each side
-		screen.setVgap(20); //sets vertical gap of 20 between items in the grid
-		screen.setHgap(90); //sets horizontal gap of 24 between items in grid
-		
-		playArea = new BorderPane();  //creates new borderpane for the playArea(top left)
-		playArea.setPadding(new Insets(12)); //gives padding of 12 on each side
+
+		GridPane screen = new GridPane(); // creates new gridpane of the whole scene
+		screen.setStyle("-fx-border-color: black"); // styles border black
+		screen.setPadding(new Insets(20)); // gives padding of 20 on each side
+		screen.setVgap(20); // sets vertical gap of 20 between items in the grid
+		screen.setHgap(90); // sets horizontal gap of 24 between items in grid
+
+		playArea = new BorderPane(); // creates new borderpane for the playArea(top left)
+		playArea.setPadding(new Insets(12)); // gives padding of 12 on each side
 		playArea.setStyle("-fx-background-color: #00B2EE; -fx-border-color: #000000");
-		playArea.setPrefSize(740, 480); //sets the size of the pane (width, height)
-		playArea.getChildren().addAll(createPlayArea()); //creates grid for game pieces
+		playArea.setPrefSize(740, 480); // sets the size of the pane (width, height)
+		playArea.getChildren().addAll(createPlayArea()); // creates grid for game pieces
 		playArea.getChildren().addAll(createColumnOverlay());
-		
-		
-		screen.add(playArea, 0, 0); //adds the pane to the grid in column 0, row 0
-		
-		
-		VBox chatArea = new VBox(20); //creates vertical box layout with a gap of 20 between items
-		
-		chatBoxTa = new TextArea(); //creates text area for chat to display in
-		chatBoxTa.setMinSize(310, 360); //sets the size of the text area
-		chatBoxTa.setEditable(false); //sets textarea so you cant type in it
+
+		screen.add(playArea, 0, 0); // adds the pane to the grid in column 0, row 0
+
+		VBox chatArea = new VBox(20); // creates vertical box layout with a gap of 20 between items
+
+		chatBoxTa = new TextArea(); // creates text area for chat to display in
+		chatBoxTa.setMinSize(310, 360); // sets the size of the text area
+		chatBoxTa.setEditable(false); // sets textarea so you cant type in it
 		chatBoxTa.setWrapText(true);
-		
-		HBox msgArea = new HBox(12); //creates horizontal box layout with gap of 12 between items
-		TextField msgTf = new TextField(); //creates textfield to type message to be sent
-		msgTf.setMinWidth(255);  //sets width of textfield
-		Button msgButton = new Button("Send"); //creates button to send message
-		//adds the textfield and button to the horizontal box layout
+
+		HBox msgArea = new HBox(12); // creates horizontal box layout with gap of 12 between items
+		TextField msgTf = new TextField(); // creates textfield to type message to be sent
+		msgTf.setMinWidth(255); // sets width of textfield
+		Button msgButton = new Button("Send"); // creates button to send message
+		// adds the textfield and button to the horizontal box layout
 		msgArea.getChildren().addAll(msgTf, msgButton);
-		
-		//adds the textarea and horizontal box layout into the vertical box layout
+
+		// adds the textarea and horizontal box layout into the vertical box layout
 		chatArea.getChildren().addAll(chatBoxTa, msgArea);
-		
-		screen.add(chatArea, 1, 0); //adds the parents vertical box layout to the gridpane in column 1, row 0
-		
-		//event handler to display messages in textarea when the send button is clicked
+
+		screen.add(chatArea, 1, 0); // adds the parents vertical box layout to the gridpane in column 1, row 0
+
+		// event handler to display messages in textarea when the send button is clicked
 		msgButton.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent arg0) {
-				
+
 				Message message = new Message(username, msgTf.getText(), new Date());
 				try {
 					oos.writeObject(message);
@@ -172,345 +173,360 @@ public class ClientGUI extends Application implements PropertyChangeListener{
 				}
 				chatBoxTa.appendText(message.toString());
 				msgTf.clear();
-				
+
 			}
-			
+
 		});
-		
-		window.setTitle("Connect 4"); //sets title of the window
+
+		window.setTitle("Connect 4"); // sets title of the window
 		gameScene = new Scene(screen, 1000, 600);
-		
+
+		window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				window.close();
+				System.exit(0);
+			}
+		});
 	}
-	
-	
+
 	public GridPane createPlayArea() {
-		
-		//creates grid for pieces
+
+		// creates grid for pieces
 		pieces = new GridPane();
 		pieces.setPadding(new Insets(10));
 		pieces.setHgap(10);
 		pieces.setVgap(10);
-				
-		for(int y = 0; y < ROWS; y++) {
-					
-			for(int x = 0; x < COLUMNS; x++) {
-				Piece gamePiece = new Piece(x,y);
+
+		for (int y = 0; y < ROWS; y++) {
+
+			for (int x = 0; x < COLUMNS; x++) {
+				Piece gamePiece = new Piece(x, y);
 				gamePiece.setFill(Color.LIGHTGRAY);
 				gamePiece.setRadius(34);
 				pieceArray[x][y] = gamePiece;
 				pieces.add(gamePiece, x, y);
-				
+
 			}
 		}
-		
+
 		return pieces;
-		
+
 	}
-	
+
 	/**
-	 * Creates a overlay of rectangles so the user knows where theyre going to place a game piece
+	 * Creates a overlay of rectangles so the user knows where theyre going to place
+	 * a game piece
+	 * 
 	 * @return GridPane layout with seven rectangles to the playArea
 	 */
-	public GridPane createColumnOverlay(){
-		
+	public GridPane createColumnOverlay() {
+
 		GridPane columns = new GridPane();
 		columns.setPadding(new Insets(0, 10, 0, 10));
 		columns.setHgap(10);
-		
-		//creates 7 rectangles for the 7 columns
-		for(int i = 0; i < COLUMNS; i++) {
-			
+
+		// creates 7 rectangles for the 7 columns
+		for (int i = 0; i < COLUMNS; i++) {
+
 			Rectangle rect = new Rectangle(68, 480);
 			rect.setFill(Color.TRANSPARENT);
-			
-			//when hovering mouse over a rectangle it will change its color
+
+			// when hovering mouse over a rectangle it will change its color
 			rect.setOnMouseEntered(e -> rect.setFill(Color.rgb(200, 200, 50, 0.3)));
-			//when mouse isnt hovering it will make it transparent again
+			// when mouse isnt hovering it will make it transparent again
 			rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
-			
+
 			rectArray[i] = rect;
 			columns.add(rect, i, 0);
 			int column = i;
 			rect.setOnMouseClicked(e -> placeGamePiece(column, pieceArray));
 		}
-		
+
 		return columns;
-		
+
 	}
-	
-	
+
 	public void placeGamePiece(int column, Piece[][] pieceArray) {
 
-		
-		
 		Piece checkPiece = pieceArray[column][0];
-		
-		if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
-			
-			//Column filled if I did this right
-			
+
+		if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+
+			// Column filled if I did this right
+
 		} else {
-			
-			for(int y = 5; y >= 0; y--) {
-				
+
+			for (int y = 5; y >= 0; y--) {
+
 				checkPiece = pieceArray[column][y];
-				
-				if(!(checkPiece.getFill() == Color.LIGHTGRAY)) {
-					//theres a piece in this spot
+
+				if (!(checkPiece.getFill() == Color.LIGHTGRAY)) {
+					// theres a piece in this spot
 				} else {
-					
+
 					checkPiece = pieceArray[column][y];
 					break;
 				}
-				
+
 			}
-			
-				checkPiece.setFill(Color.RED);
-				playArea.setDisable(true);
-				try {
-					oos.writeObject(checkPiece);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				checkWin(checkPiece);
-			
+
+			checkPiece.setFill(Color.RED);
+			playArea.setDisable(true);
+			try {
+				oos.writeObject(checkPiece);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			checkWin(checkPiece);
+
 		}
-	
+
 	}
 
+	
 	private void checkWin(Piece checkPiece) {
 		System.out.println(checkPiece.getColumn() + "," + checkPiece.getRow());
 
-		if (checkForwardDiagonal(checkPiece))
+		boolean win = false;
+
+		if (checkForwardDiagonal(checkPiece)) {
 			System.out.println("you win");
-		else if (checkHorizontal(checkPiece) )
+			win = true;
+		} else if (checkHorizontal(checkPiece)) {
 			System.out.println("you win");
-		else if( checkDown(checkPiece))
+			win = true;
+		} else if (checkDown(checkPiece)) {
 			System.out.println("you win");
-		else if(checkBackDiagonal(checkPiece)) 
+			win = true;
+		} else if (checkBackDiagonal(checkPiece)) {
 			System.out.println("you win");
-		
-	}
-
-	private boolean checkBackDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		
-		 	int counter = 0;
-
-	        int x = currentPiece.getColumn();
-	        int y = currentPiece.getRow();
-
-	        for(int i = -3; i < 4; i++) {
-	        	
-	        	if (((x + i) < 0) || ((y + i) < 0)) {
-	        		i++;
-	        		continue;
-	        	}
-	        	else if (((x + i) > (COLUMNS - 1)) || ((y + i) > (ROWS - 1))) {
-	        		break;
-	        	}
-
-	            Piece nextPiece = pieceArray[x + i][y + i];
-
-	            if(!(nextPiece.getFill() == Color.RED)) {
-
-	                counter = 0;
-	                
-	            } else {
-	            	
-	            	counter++;
-	            	
-	            }
-
-	            if (counter == 4) {
-	                return true;
-	            }
-
-	        }
-
-	        return false;
-			
+			win = true;
 		}
 
+		if (win) {
+			try {
+				oos.writeObject("CONDITION-YOU-LOSE");
+				playArea.setDisable(true);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	private boolean checkBackDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
+
+		int counter = 0;
+
+		int x = currentPiece.getColumn();
+		int y = currentPiece.getRow();
+
+		for (int i = -3; i < 4; i++) {
+
+			if (((x + i) < 0) || ((y + i) < 0)) {
+				i++;
+				continue;
+			} else if (((x + i) > (COLUMNS - 1)) || ((y + i) > (ROWS - 1))) {
+				break;
+			}
+
+			Piece nextPiece = pieceArray[x + i][y + i];
+
+			if (!(nextPiece.getFill() == Color.RED)) {
+
+				counter = 0;
+
+			} else {
+
+				counter++;
+
+			}
+
+			if (counter == 4) {
+				return true;
+			}
+
+		}
+
+		return false;
+
+	}
+
 	private boolean checkForwardDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
-	
-		 int counter = 0;
-		 ArrayList<Piece> placedPiece = new ArrayList<>();
-	     int x = currentPiece.getColumn();
-	     int y = currentPiece.getRow();
-	     //placedPiece.add(currentPiece);
-	     for(int i = -3; i < 4; i++) {
-	        
-	    	 if (((x + i) > (COLUMNS - 1)) || ((y - i) < 0)) {
-		        	
-		        	return false;
-		        	
-		      }
-	        if (!(((x + i) < 0) || ((y - i) > ROWS - 1))) {
-	        	
-	        	Piece nextPiece = pieceArray[x + i][y - i];
-		        
-		        if(!(nextPiece.getFill() == Color.RED)) {
 
-		            counter = 0;
-		                
-		        } else {
-		            	
-		            counter++;
-		            placedPiece.add(nextPiece);
-		           
-		        }
-		        System.out.println("counter is at: " + counter);
-		        if (counter == 4) {
-		        	
-		            return true;
-		            
-		        }
+		int counter = 0;
+		ArrayList<Piece> placedPiece = new ArrayList<>();
+		int x = currentPiece.getColumn();
+		int y = currentPiece.getRow();
+		// placedPiece.add(currentPiece);
+		for (int i = -3; i < 4; i++) {
 
-	        	
-	        }
-	     
-	    }
-	    for(Piece p : placedPiece) {
-	    	
-	    	System.out.println("placed pieces: " + p.toString());
-	    }
-	    return false;
-			
+			if (((x + i) > (COLUMNS - 1)) || ((y - i) < 0)) {
+
+				return false;
+
+			}
+			if (!(((x + i) < 0) || ((y - i) > ROWS - 1))) {
+
+				Piece nextPiece = pieceArray[x + i][y - i];
+
+				if (!(nextPiece.getFill() == Color.RED)) {
+
+					counter = 0;
+
+				} else {
+
+					counter++;
+					placedPiece.add(nextPiece);
+
+				}
+				System.out.println("counter is at: " + counter);
+				if (counter == 4) {
+
+					return true;
+
+				}
+
+			}
+
+		}
+		for (Piece p : placedPiece) {
+
+			System.out.println("placed pieces: " + p.toString());
+		}
+		return false;
+
 	}
 
 	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
-		
-        int counter = 1;
 
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
+		int counter = 1;
 
-        for(int i = 0; i < 4; i++) {
-        	
-        	if(y > ROWS - 1) {
-        		return false;
-        	}
-        	
-            Piece nextPiece = pieceArray[x][y ];
-            
-            if(!(nextPiece.getFill() == Color.RED)) {
+		int x = currentPiece.getColumn();
+		int y = currentPiece.getRow();
 
-               
-                return false;
-            } else {
-            	
-            	counter++;
-                y++;
-            	
-            }
+		for (int i = 0; i < 4; i++) {
 
-            System.out.println("Counter" + counter);
-            if (counter == 4) {
-            	
-                return true;
-            }
+			if (y > ROWS - 1) {
+				return false;
+			}
 
-        }
+			Piece nextPiece = pieceArray[x][y];
 
-        return false;
-    }
-		
-	
+			if (!(nextPiece.getFill() == Color.RED)) {
 
-	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException{
-		
-        int counter = 0;
+				return false;
+			} else {
 
-        int x = currentPiece.getColumn();
-        int y = currentPiece.getRow();
+				counter++;
+				y++;
 
-        for(int i = -3; i < 4; i++) {
-        	
-        	if ((x + i) < 0) {
-        		i++;
-        		continue;
-        	}
-        	else if ((x+i) > (COLUMNS - 1)) {
-        		break;
-        	}
+			}
 
-            Piece nextPiece = pieceArray[x + i][y];
+			System.out.println("Counter" + counter);
+			if (counter == 4) {
 
-            if(!(nextPiece.getFill() == Color.RED)) {
+				return true;
+			}
 
-                counter = 0;
-                
-            } else {
-            	
-            	counter++;
-            	
-            }
+		}
 
-            if (counter == 4) {
-                return true;
-            }
-
-        }
-
-        return false;
-		
+		return false;
 	}
 
+	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
+
+		int counter = 0;
+
+		int x = currentPiece.getColumn();
+		int y = currentPiece.getRow();
+
+		for (int i = -3; i < 4; i++) {
+
+			if ((x + i) < 0) {
+				i++;
+				continue;
+			} else if ((x + i) > (COLUMNS - 1)) {
+				break;
+			}
+
+			Piece nextPiece = pieceArray[x + i][y];
+
+			if (!(nextPiece.getFill() == Color.RED)) {
+
+				counter = 0;
+
+			} else {
+
+				counter++;
+
+			}
+
+			if (counter == 4) {
+				return true;
+			}
+
+		}
+
+		return false;
+
+	}
 
 	public void connect() {
 		try {
-			
+
 			socket = new Socket(ip, 3333);
 			OutputStream os = socket.getOutputStream();
 			oos = new ObjectOutputStream(os);
-			
+
 			lis = new InputListener(socket, this);
-			
+
 			new Thread(lis).start();
-			
+
 			window.setScene(gameScene);
 			playArea.setDisable(true);
-			
+
 		} catch (UnknownHostException e) {
-			
+
 			failLbl.setVisible(true);
 			System.out.println("Failed to Connect");
-			
+
 		} catch (IOException e) {
-			
+
 			failLbl.setVisible(true);
 			System.out.println("Failed to Connect");
-			
+
 		}
-		
-		
-		
+
 	}
-	
+
 	@Override
 	// inputListener will send the object to the gui through here,
-	// needs to work with messages and game events 
+	// needs to work with messages and game events
 	public void propertyChange(PropertyChangeEvent event) {
-		
+
 		String toString = event.getOldValue().toString();
 		System.out.println(toString);
 		if (toString.contains("Message")) {
 			Message message = (Message) event.getOldValue();
 			chatBoxTa.appendText(message.toString());
-		}
-		else if (toString.contains("Piece"))		 {
+		} else if (toString.contains("Piece")) {
 			Piece piece = (Piece) event.getOldValue();
 			piece = pieceArray[piece.getColumn()][piece.getRow()];
 			piece.setFill(Color.YELLOW);
 			playArea.setDisable(false);
-		}
-		else if (toString.contains("YOU-GO-FIRST")) {
-			
+		} else if (toString.contains("YOU-GO-FIRST")) {
+
 			playArea.setDisable(false);
+		} else if (toString.contains("CONDITION-YOU-LOSE")) {
+			playArea.setDisable(true);
+			// Add message and buttons for staying or leaving
 		}
-		
-		
+
 	}
-	
+
 }

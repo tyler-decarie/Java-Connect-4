@@ -17,6 +17,7 @@ public class ServerGUI extends Application {
     Stage window;
     Scene serverScene;
     ServerObject so;
+    static TextArea serverOutputTA;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -27,7 +28,7 @@ public class ServerGUI extends Application {
     	screen.setPadding(new Insets(10));
     	screen.setAlignment(Pos.CENTER);
     	
-    	TextArea serverOutputTA = new TextArea();
+    	serverOutputTA = new TextArea();
     	serverOutputTA.setPrefSize(450, 450);
     	serverOutputTA.setEditable(false); //sets textarea so you cant type in it
 		serverOutputTA.setWrapText(true);
@@ -55,5 +56,20 @@ public class ServerGUI extends Application {
 			}
 		});
 		
+		stopBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				window.close();
+				System.exit(0);;
+			}
+		});
+		
     }
+    
+    public static void writeToTextArea(String message) {
+    	serverOutputTA.appendText(message);
+    }
+    
+    
 }
