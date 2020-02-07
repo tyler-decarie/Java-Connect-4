@@ -8,21 +8,28 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Tyler Decarie, Travis Brady
+ * 
+ * Class observed by the ClientGUI to respond to changes made over the network
+ *
+ */
 public class InputListener implements Runnable{
 
-	//attributes
+	//Attributes
 	private Socket socket;
 	private ObjectInputStream ois;
 	private int number;
 	private List<PropertyChangeListener> observers = new ArrayList<PropertyChangeListener>();
 	
+	//Constructors
 	//number 0 if this one
 	public InputListener(Socket socket, PropertyChangeListener observer) {
 		this.socket = socket;
 		observers.add(observer);
 		
 	}
-	
 	
 	//number not 0 if this one
 	public InputListener(int number, Socket socket, PropertyChangeListener observer) {
@@ -65,7 +72,10 @@ public class InputListener implements Runnable{
 		}
 	}
 	
-	//
+	/**
+	 * 
+	 * @param object notifies the ClientGUI of what the change is
+	 */
 	public void notify(Object object) {
 		
 		for( PropertyChangeListener observer : observers  )

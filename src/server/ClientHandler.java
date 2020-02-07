@@ -9,6 +9,11 @@ import java.util.Random;
 
 import utility.InputListener;
 
+/**
+ * 
+ * @author Tyler Decarie, Travis Brady
+ *
+ */
 public class ClientHandler implements Runnable, PropertyChangeListener {
 
 	private Socket socket1;
@@ -86,7 +91,7 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 				oos2.writeObject(event.getOldValue());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 		else if (il.getNumber() == 2)
@@ -96,7 +101,7 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 				oos1.writeObject(event.getOldValue());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 		

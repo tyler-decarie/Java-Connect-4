@@ -23,15 +23,21 @@ public class Message implements Serializable
 	static final long serialVersionUID = 5488945625178844229L;
 	//Attributes
 	private String			name = "Message";
-	private String 			user;
-	private String			msg;
-	private Date			timeStamp;
+	private String 			user; //name of sender
+	private String			msg; //message body
+	private Date			timeStamp; //timestamp of when message was sent
 	
 	//Constructors
 	public Message()
 	{
 	}
 	
+	/**
+	 * 
+	 * @param user set to this user
+	 * @param msg set to this msg
+	 * @param timeStamp set to this timeStamp
+	 */
 	public Message(String user, String msg, Date timeStamp)
 	{
 		this.user = user;
@@ -87,10 +93,18 @@ public class Message implements Serializable
 		this.timeStamp = timeStamp;
 	}
 	
+	/**
+	 * 
+	 * @return name of sender
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * 
+	 * @param name the name to set
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

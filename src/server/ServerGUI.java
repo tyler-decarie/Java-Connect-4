@@ -12,6 +12,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
+/**
+ * 
+ * @author Tyler Decarie, Travis Brady
+ * 
+ * This class handles creating the GUI to interact with the server.
+ * The server will start when the "start" button is pressed and shutdown when the "Stop" button is pressed
+ *
+ */
 public class ServerGUI extends Application {
 
     Stage window;
@@ -22,7 +31,7 @@ public class ServerGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-    	window = primaryStage;
+    	window = primaryStage; //renames primary stage to window
     	
     	VBox screen = new VBox(10);
     	screen.setPadding(new Insets(10));
@@ -67,6 +76,10 @@ public class ServerGUI extends Application {
 		
     }
     
+    /**
+     * 
+     * @param message that is sent to the serverGUI
+     */
     public static void writeToTextArea(String message) {
     	serverOutputTA.appendText(message);
     }

@@ -52,6 +52,9 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	BorderPane playArea;
 	Label failLbl;
 	VBox reinstateBox;
+	Label winnerLbl;
+	boolean opponentConnected;
+	boolean loggedIn;
 
 	private static final int ROWS = 6;
 	private static final int COLUMNS = 7;
@@ -125,7 +128,14 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 				}
 			}
 		});
-
+		window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+			@Override
+			public void handle(WindowEvent event) {
+				window.close();
+				System.exit(0);
+			}
+		});
 		window.setTitle("Connect 4 - Login"); // sets title of the window
 		loginScene = new Scene(grid, 400, 400); // adds everything to the scene
 
@@ -155,7 +165,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 		VBox chatArea = new VBox(20); // creates vertical box layout with a gap of 20 between items
 
 		chatBoxTa = new TextArea(); // creates text area for chat to display in
-		chatBoxTa.setMinSize(310, 360); // sets the size of the text area
+		chatBoxTa.setMinSize(310, 330); // sets the size of the text area
 		chatBoxTa.setEditable(false); // sets textarea so you cant type in it
 		chatBoxTa.setWrapText(true);
 
@@ -171,7 +181,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 		
 		reinstateBox = new VBox(10);
 		HBox buttonBox = new HBox(10);
-		Label winnerLbl = new Label(" won the game");
+		winnerLbl = new Label("");
 		Label reconnectLbl = new Label("Would you like to play again?");
 		Button yesBtn = new Button("Yes");
 		Button noBtn = new Button("No");
@@ -211,27 +221,52 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 		yesBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+            public void handle(ActionEvent arg0) { 
+            	// resets game if button is clicked, if opponent has quit add this player to matchmaking
+                resetGameArea(pieceArray);
+                reinstateBox.setVisible(false);
+                if (!opponentConnected) {
+    				try {
+    					socket.close();
+    					oos.close();
+    					
+        				connect();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
             }
         });
-
         noBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+            public void handle(ActionEvent arg0) { // closes game if button is clicked
+            	try {
+					oos.writeObject("OPPONENT-HAS-DROPPED");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                window.close();
+                System.exit(0);
             }
         });
 
 		window.setTitle("Connect 4"); // sets title of the window
-		gameScene = new Scene(screen, 1000, 530);
+		gameScene = new Scene(screen, 1000, 540);
 		window.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
 			@Override
 			public void handle(WindowEvent event) {
+				if (loggedIn) {
+					try {
+					oos.writeObject("OPPONENT-HAS-DROPPED");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
 				window.close();
 				System.exit(0);
 			}
@@ -372,6 +407,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 		if (win) {
 			try {
+				winnerLbl.setText("You win!");
 				oos.writeObject("CONDITION-YOU-LOSE");
 				playArea.setDisable(true);
 				reinstateBox.setVisible(true);
@@ -475,7 +511,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
-		int counter = 1;
+		int counter = 0;
 
 		int x = currentPiece.getColumn();
 		int y = currentPiece.getRow();
@@ -519,7 +555,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 		for (int i = -3; i < 4; i++) {
 
 			if ((x + i) < 0) {
-				i++;
+				
 				continue;
 			} else if ((x + i) > (COLUMNS - 1)) {
 				break;
@@ -560,7 +596,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 			window.setScene(gameScene);
 			playArea.setDisable(true);
-
+			loggedIn = true;
 		} catch (UnknownHostException e) {
 
 			failLbl.setVisible(true);
@@ -594,10 +630,35 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 			playArea.setDisable(false);
 		} else if (toString.contains("CONDITION-YOU-LOSE")) {
+			setWinLblText();
 			playArea.setDisable(true);
+			reinstateBox.setVisible(true);
 			// Add message and buttons for staying or leaving
+		} else if (toString.contains("OPPONENT-HAS-DROPPED")) {
+			winnerLbl.setText("Oppoenent disconnected");
+			reinstateBox.setVisible(true);
+			opponentConnected = false;
 		}
 
+	}
+	
+	private void resetGameArea(Piece[][] pieceArray) {
+
+        for (int y = 0; y < ROWS; y++) {
+
+            for (int x = 0; x < COLUMNS; x++) {
+                Piece gamePiece = pieceArray[x][y];
+                gamePiece.setFill(Color.LIGHTGRAY);
+                pieceArray[x][y] = gamePiece;
+
+            }
+        }
+    }
+	
+	private void setWinLblText() {
+		
+		winnerLbl.setText("You lose!");
+		
 	}
 
 }

@@ -5,8 +5,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
+/**
+ * 
+ * @author Tyler Decarie, Travis Brady
+ * 
+ * ServerObject class is responsible for making connections between two players
+ *
+ */
 public class ServerObject implements Runnable{
-		
+	
 	@Override
 	public void run() {
 		int counter = 1;
@@ -32,7 +40,7 @@ public class ServerObject implements Runnable{
 
 	            if(sockets.size() == 2) {
 	                new Thread(new ClientHandler(sockets.get(0), sockets.get(1))).start();
-	                ServerGUI.writeToTextArea("Clients Paired. Game " + counter++ + " started.");
+	                ServerGUI.writeToTextArea("\nClients Paired. Game " + counter++ + " started.");
 	                sockets.clear();
 	            }
 
