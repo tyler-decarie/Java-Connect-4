@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -463,6 +464,12 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	}
 
+	/**
+	 * @param currentPiece Piece placed
+	 * @return true if condition met, false if not
+	 * @throws ArrayIndexOutOfBoundsException
+	 * checks the game board for a win condition in a forward diagonal direction like a "/"
+	 */
 	private boolean checkForwardDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
 		int counter = 0;
@@ -509,6 +516,11 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	}
 
+	/**
+	 * @param currentPiece
+	 * @return
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
 	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
 		int counter = 0;
@@ -545,6 +557,11 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 		return false;
 	}
 
+	/**
+	 * @param currentPiece
+	 * @return
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
 	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
 		int counter = 0;
@@ -583,6 +600,9 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void connect() {
 		try {
 
@@ -611,6 +631,9 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	// inputListener will send the object to the gui through here,
 	// needs to work with messages and game events
@@ -642,6 +665,9 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	}
 	
+	/**
+	 * @param pieceArray
+	 */
 	private void resetGameArea(Piece[][] pieceArray) {
 
         for (int y = 0; y < ROWS; y++) {
@@ -655,10 +681,18 @@ public class ClientGUI extends Application implements PropertyChangeListener {
         }
     }
 	
+	/**
+	 * 
+	 */
 	private void setWinLblText() {
-		
-		winnerLbl.setText("You lose!");
-		
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				winnerLbl.setText("You lose!");
+				
+			}
+		}); 
 	}
 
 }
