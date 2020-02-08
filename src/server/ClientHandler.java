@@ -20,11 +20,11 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 	
 	
 	/**
+	 * ClientHandler pairs two players and sets up InputListeners to recieve and send objects over the server.
+	 * ClientHandler is observing the two InputListeners for property changes.
 	 * @param socket1  socket for the first player
 	 * @param socket2 socket for the second player
 	 * 
-	 * ClientHandler pairs two players and sets up InputListeners to recieve and send objects over the server.
-	 * ClientHandler is observing the two InputListeners for property changes.
 	 */
 	public ClientHandler(Socket socket1, Socket socket2) {
 		Random rand = new Random();

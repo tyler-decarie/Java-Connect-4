@@ -14,12 +14,11 @@ import javafx.stage.Stage;
 
 
 /**
- * 
- * @author Tyler Decarie, Travis Brady
- * 
  * This class handles creating the GUI to interact with the server.
  * The server will start when the "start" button is pressed and shutdown when the "Stop" button is pressed
  *
+ * @author Tyler Decarie, Travis Brady
+ * 
  */
 public class ServerGUI extends Application {
 

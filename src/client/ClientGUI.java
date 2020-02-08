@@ -34,10 +34,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 
 /**
- * @author Tyler Decarie, Travis Brady
- * 
  * This class handles creation of the login page, and play area of the game client.
  * The login page is used to connect to the server and inputs from the play area or chat are sent to the server to be sent to another player.
+ * @author Tyler Decarie, Travis Brady
+ * 
  */
 public class ClientGUI extends Application implements PropertyChangeListener {
 
@@ -337,10 +337,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	
 	/**
-	 * @param column the column that was clicked for placing a Piece
-	 * @param pieceArray the array of pieces in the game grid
 	 * when a column is clicked this method is called.
 	 * this method checks the column that was clicked and places the Piece in the lowest unfilled position
+	 * @param column the column that was clicked for placing a Piece
+	 * @param pieceArray the array of pieces in the game grid
 	 */
 	public void placeGamePiece(int column, Piece[][] pieceArray) {
 
@@ -382,10 +382,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	
 	/**
-	 * @param checkPiece the piece that was just placed in the play area
 	 * this method calls a series of check methods for win conditions.
 	 * if any of the methods returns true the player was won, the play area will be disabled and prompt to play again or exit the game
 	 * 
+	 * @param checkPiece the piece that was just placed in the play area
 	 */
 	private void checkWin(Piece checkPiece) {
 		System.out.println(checkPiece.getColumn() + "," + checkPiece.getRow());
@@ -422,10 +422,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 
 	
 	/**
+	 * checks the game board for a win condition in a backward diagonal direction like a "\"
 	 * @param currentPiece the Piece that was placed by the player
 	 * @return returns true if the win condition has been met, otherwise false
 	 * @throws ArrayIndexOutOfBoundsException 
-	 * checks the game board for a win condition in a backward diagonal direction like a "\"
 	 */
 	private boolean checkBackDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -466,10 +466,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
+	 * checks the game board for a win condition in a forward diagonal direction like a "/"
 	 * @param currentPiece Piece placed
 	 * @return true if condition met, false if not
 	 * @throws ArrayIndexOutOfBoundsException
-	 * checks the game board for a win condition in a forward diagonal direction like a "/"
 	 */
 	private boolean checkForwardDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -518,10 +518,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
+	 * checks the 3 Pieces below the placed Piece for 4 in a row
 	 * @param currentPiece the Piece that was placed
 	 * @return true if condition is met, false otherwise
 	 * @throws ArrayIndexOutOfBoundsException
-	 * checks the 3 Pieces below the placed Piece for 4 in a row
 	 */
 	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -560,10 +560,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
+	 * checks the game board for a win in the horizontal axis 
 	 * @param currentPiece the Piece placed
 	 * @return true if condition is met, false otherwise
 	 * @throws ArrayIndexOutOfBoundsException
-	 * checks the game board for a win in the horizontal axis 
 	 */
 	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -669,8 +669,8 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 	
 	/**
-	 * @param pieceArray the entire array of game Pieces
 	 * Generally at the end of a game this method is called, resets all Pieces in the grid to its default state
+	 * @param pieceArray the entire array of game Pieces
 	 */
 	private void resetGameArea(Piece[][] pieceArray) {
 

@@ -7,10 +7,9 @@ import java.util.ArrayList;
 
 
 /**
- * 
- * @author Tyler Decarie, Travis Brady
- * 
+ *  
  * ServerObject class is responsible for making connections between two players
+ * @author Tyler Decarie, Travis Brady
  *
  */
 public class ServerObject implements Runnable{

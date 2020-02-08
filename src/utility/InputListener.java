@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
- * @author Tyler Decarie, Travis Brady
- * 
  * Class observed by the ClientGUI to respond to changes made over the network
+ * @author Tyler Decarie, Travis Brady
  *
  */
 public class InputListener implements Runnable{

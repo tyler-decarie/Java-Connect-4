@@ -5,11 +5,10 @@ import java.io.Serializable;
 import javafx.scene.shape.Circle;
 
 /**
- * 
- * @author Tyler Decarie, Travis Brady
- * 
  * A class to create a Piece object to be placed on the board and transported across the network
  * Every Piece is a Circle, and has a x coordinate and y coordinate
+ * @author Tyler Decarie, Travis Brady
+ * 
  */
 public class Piece extends Circle implements Serializable{
 	
