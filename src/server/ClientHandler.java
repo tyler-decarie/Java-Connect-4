@@ -47,7 +47,7 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Client Disconnected");
+			ServerGUI.writeToTextArea("\nClient Disconnected");
 		}
 		
 		lis1 = new InputListener(1, socket1, this);

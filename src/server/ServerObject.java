@@ -37,7 +37,7 @@ public class ServerObject implements Runnable{
 	    while(true) {
 	        try {
 	            socket = server.accept();
-	            System.out.println("Accepted a client connection.");
+	            ServerGUI.writeToTextArea("\nAccepted a client connection.");
 	            sockets.add(socket);
 
 	            if(sockets.size() == 2) {
