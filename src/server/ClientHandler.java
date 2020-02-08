@@ -9,6 +9,14 @@ import java.util.Random;
 
 import utility.InputListener;
 
+/**
+ * 
+ * ClientHandler pairs two players and sets up InputListeners to recieve and send objects over the server.
+ * ClientHandler is observing the two InputListeners for property changes.
+ * 
+ * @author Tyler Decarie, Travis Brady
+ *
+ */
 public class ClientHandler implements Runnable, PropertyChangeListener {
 
 	private Socket socket1;
@@ -20,8 +28,7 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 	
 	
 	/**
-	 * ClientHandler pairs two players and sets up InputListeners to recieve and send objects over the server.
-	 * ClientHandler is observing the two InputListeners for property changes.
+	 * Constructor decides which player will go first in the game and creates two inputlisteners 
 	 * @param socket1  socket for the first player
 	 * @param socket2 socket for the second player
 	 * 

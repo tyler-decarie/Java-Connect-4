@@ -1,0 +1,13 @@
+---What is completed---
+
+-Chat before, during and after the game.
+-Players are able to play the game and the logic is correct.
+-Players can be reinstated once the game is finished.
+-Server can maintain multiple games being played concurrently.
+-ServerGUI shows logs.
+-ClientGUI is intuitive and easy to use.
+-Proper project structure and naming is present.
+-The use of streams, sockets, threads, and observer pattern are implemented.
+-Exceptions are handled and the game does not crash.
+-Key methods are synchronized.
+
