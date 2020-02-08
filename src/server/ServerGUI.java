@@ -28,6 +28,10 @@ public class ServerGUI extends Application {
     ServerObject so;
     static TextArea serverOutputTA;
 
+    /** Runs the ServerGUI Application
+     *  When the start button is pressed a thread for the server is created 
+     *  When the stop button is pressed the server is shut down
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -76,7 +80,7 @@ public class ServerGUI extends Application {
 		
     }
     
-    /**
+    /** Appends server messages to the ServerGUI TextArea
      * 
      * @param message that is sent to the serverGUI
      */

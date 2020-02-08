@@ -84,7 +84,7 @@ public class ClientHandler implements Runnable, PropertyChangeListener {
 	
 	
 	/**
-	 * Sends object from one player to another
+	 * Sends objects from one player to another
 	 */
 	public synchronized void propertyChange(PropertyChangeEvent event) {
 		

@@ -9,7 +9,7 @@ import javafx.scene.shape.Circle;
  * @author Tyler Decarie, Travis Brady
  * 
  * A class to create a Piece object to be placed on the board and transported across the network
- *
+ * Every Piece is a Circle, and has a x coordinate and y coordinate
  */
 public class Piece extends Circle implements Serializable{
 	
@@ -23,7 +23,7 @@ public class Piece extends Circle implements Serializable{
 		
 	}
 	
-	/**
+	/** Constructor for Piece
 	 * 
 	 * @param x coordinate
 	 * @param y coordinate

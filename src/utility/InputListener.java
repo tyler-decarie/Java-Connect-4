@@ -88,11 +88,17 @@ public class InputListener implements Runnable{
 	}
 
 
+	/**
+	 * @return returns the number that the InputListener was assigned when it was instantiated
+	 */
 	public int getNumber() {
 		return number;
 	}
 
 
+	/** Setter for number
+	 * @param number 
+	 */
 	public void setNumber(int number) {
 		this.number = number;
 	}

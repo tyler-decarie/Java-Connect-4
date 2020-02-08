@@ -66,7 +66,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	boolean redsTurn = true;
 
 	
-	/**
+	/**Starts the ClientGUI Application and loads the screens and game 
 	 * @param primaryStage 
 	 */
 	@Override
@@ -425,6 +425,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	 * @param currentPiece the Piece that was placed by the player
 	 * @return returns true if the win condition has been met, otherwise false
 	 * @throws ArrayIndexOutOfBoundsException 
+	 * checks the game board for a win condition in a backward diagonal direction like a "\"
 	 */
 	private boolean checkBackDiagonal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -517,9 +518,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
-	 * @param currentPiece
-	 * @return
+	 * @param currentPiece the Piece that was placed
+	 * @return true if condition is met, false otherwise
 	 * @throws ArrayIndexOutOfBoundsException
+	 * checks the 3 Pieces below the placed Piece for 4 in a row
 	 */
 	private boolean checkDown(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -558,9 +560,10 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
-	 * @param currentPiece
-	 * @return
+	 * @param currentPiece the Piece placed
+	 * @return true if condition is met, false otherwise
 	 * @throws ArrayIndexOutOfBoundsException
+	 * checks the game board for a win in the horizontal axis 
 	 */
 	private boolean checkHorizontal(Piece currentPiece) throws ArrayIndexOutOfBoundsException {
 
@@ -601,7 +604,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
-	 * 
+	 * once the IP and username have been entered on the login page, this method attemps 
 	 */
 	public void connect() {
 		try {
@@ -632,11 +635,11 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 
 	/**
-	 *
+	 * reads objects from the server and opponent 
+	 * Messages are appended to the chat box, Piece objects are placed on the game board,
+	 * YOU-GO-FIRST Strings make the play area active, OPPONENT-HAS-DROPPED will auto win the game for the player and prompt for reconnection
 	 */
 	@Override
-	// inputListener will send the object to the gui through here,
-	// needs to work with messages and game events
 	public void propertyChange(PropertyChangeEvent event) {
 
 		String toString = event.getOldValue().toString();
@@ -666,7 +669,8 @@ public class ClientGUI extends Application implements PropertyChangeListener {
 	}
 	
 	/**
-	 * @param pieceArray
+	 * @param pieceArray the entire array of game Pieces
+	 * Generally at the end of a game this method is called, resets all Pieces in the grid to its default state
 	 */
 	private void resetGameArea(Piece[][] pieceArray) {
 
@@ -682,7 +686,7 @@ public class ClientGUI extends Application implements PropertyChangeListener {
     }
 	
 	/**
-	 * 
+	 * Sets the win label on the GUI to "You lose!"
 	 */
 	private void setWinLblText() {
 		Platform.runLater(new Runnable() {

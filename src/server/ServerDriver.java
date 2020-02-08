@@ -10,7 +10,7 @@ import javafx.application.Application;
  * @version 1.1
  */
 public class ServerDriver {
-    /**
+    /** Launches the ServerGUI Application that will display server traffic
      * @param args
      */
     public static void main(String[] args) {

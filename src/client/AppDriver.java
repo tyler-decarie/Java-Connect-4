@@ -5,7 +5,7 @@ import javafx.application.Application;
 /**
  * 
  * @author Tyler Decarie, Travis Brady
- *
+ * Runs the ClientGUI JavaFX Application
  */
 public class AppDriver {
 	

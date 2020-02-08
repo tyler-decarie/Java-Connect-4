@@ -15,6 +15,9 @@ import java.util.ArrayList;
  */
 public class ServerObject implements Runnable{
 	
+	/** Runs the server as a thread so it can run concurrently with the ServerGUI
+	 *
+	 */
 	@Override
 	public void run() {
 		int counter = 1;
